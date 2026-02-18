@@ -1,7 +1,9 @@
+import { operatioCollectionis, type ContextusNativus } from "../builtins/collections"
 import { AugurErratum, ErratumAerarii, ErratumExsecutionis, ErratumOraculi } from "../errors"
 import type { Expressio, OperatorBinarius, Programma, Sententia } from "../parser/ast"
 import { OraculumFictum } from "../providers/fake"
-import type { Oraculum, Rogatio, SummariumOperandi, ValorCrudus } from "../providers/types"
+import type { Oraculum, Rogatio, SummariumOperandi } from "../providers/types"
+import { coerce, summa } from "./coercio"
 import { Ambitus } from "./environment"
 import { PilaZonarum, temperaturaPro, type Zona } from "./zones"
 import {
@@ -16,7 +18,6 @@ import {
   NIHIL,
   operatioBinariaNativa,
   operatioUnariaNativa,
-  praevisio,
   repraesenta,
   type Valor,
   type ValorRitus,
@@ -325,14 +326,35 @@ export class Aestimator {
         return await this.aestimaIndicium(e, amb)
       case "Divinatio":
         return await this.aestimaDivinationem(e, amb)
+      case "OperatioCollectionis":
+        return await this.aestimaOperationemCollectionis(e, amb)
       case "Petitio":
       case "Interrogatio":
       case "Consultatio":
       case "Memoria":
       case "Lectio":
-      case "OperatioCollectionis":
         throw new ErratumExsecutionis(`'${e.genus}' not yet implemented`)
     }
+  }
+
+  private async aestimaOperationemCollectionis(
+    e: Extract<Expressio, { genus: "OperatioCollectionis" }>,
+    amb: Ambitus,
+  ): Promise<Valor> {
+    const subiectum = await this.aestima(e.subiectum, amb)
+    if (estOraculum(subiectum)) return subiectum
+    let rotuli: Valor[] | undefined
+    if (e.rotuli) {
+      rotuli = []
+      for (const r of e.rotuli) rotuli.push(await this.aestima(r, amb))
+    }
+    const ctx: ContextusNativus = {
+      oraculum: this.oraculum,
+      zona: this.pila.apex(),
+      temperaturaDivina: this.temperaturaDivina,
+      contextus: this.contextusCurrens,
+    }
+    return await operatioCollectionis(ctx, e.operatio, subiectum, e.criterium, rotuli)
   }
 
   private async divinaBinariam(op: OperatorBinarius, a: Valor, b: Valor): Promise<Valor> {
@@ -385,7 +407,17 @@ export class Aestimator {
     for (const arg of e.argumenta) argumenta.push(await this.aestima(arg, amb))
 
     if (advocatus.divinatus || advocatus.corpus === null) {
-      throw new ErratumExsecutionis("divined rituals not yet implemented")
+      const zona = this.pila.apex()
+      const rogatio: Rogatio = {
+        genusOperationis: `ritual:${advocatus.nomen}`,
+        operandi: argumenta.map(summa),
+        instructio: `invoke the ritual '${advocatus.nomen}'`,
+        temperatura: temperaturaPro(zona, this.temperaturaDivina),
+        contextus: this.contextusCurrens,
+      }
+      const responsum = await this.oraculum.divina(rogatio)
+      if (!responsum.ratum) return fingeOraculum(responsum.causa)
+      return coerce(responsum.valor)
     }
     if (argumenta.length !== advocatus.parametri.length) {
       throw new ErratumExsecutionis(
@@ -421,10 +453,6 @@ export class Aestimator {
   }
 }
 
-function summa(v: Valor): SummariumOperandi {
-  return { genus: v.genus, praevisio: praevisio(v) }
-}
-
 function genusExpectatumOperatoris(op: OperatorBinarius): string | undefined {
   switch (op) {
     case "==":
@@ -437,14 +465,4 @@ function genusExpectatumOperatoris(op: OperatorBinarius): string | undefined {
     default:
       return undefined
   }
-}
-
-function coerce(c: ValorCrudus): Valor {
-  if (typeof c === "number") return creaNumerus(c)
-  if (typeof c === "boolean") return creaVeritas(c)
-  if (typeof c === "string") return creaTextus(c)
-  if (Array.isArray(c)) return creaAgmen(c.map(coerce))
-  const tabula = new Map<string, Valor>()
-  for (const [clavis, valor] of Object.entries(c)) tabula.set(clavis, coerce(valor))
-  return creaTabula(tabula)
 }
