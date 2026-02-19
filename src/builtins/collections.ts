@@ -1,6 +1,6 @@
 import type { OperatioCollectionisGenus } from "../parser/ast"
 import { coerce, estVerumCrudus, summa } from "../interpreter/coercio"
-import { temperaturaPro, type Zona } from "../interpreter/zones"
+import { temperaturaPro } from "../interpreter/zones"
 import {
   creaAgmen,
   creaNumerus,
@@ -12,14 +12,8 @@ import {
   suntAequales,
   type Valor,
 } from "../interpreter/values"
-import type { Oraculum, Rogatio } from "../providers/types"
-
-export interface ContextusNativus {
-  oraculum: Oraculum
-  zona: Zona
-  temperaturaDivina: number
-  contextus: string[]
-}
+import type { Rogatio } from "../providers/types"
+import type { ContextusNativus } from "./types"
 
 export async function operatioCollectionis(
   ctx: ContextusNativus,

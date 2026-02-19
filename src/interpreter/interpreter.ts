@@ -1,4 +1,7 @@
-import { operatioCollectionis, type ContextusNativus } from "../builtins/collections"
+import { operatioCollectionis } from "../builtins/collections"
+import { affer } from "../builtins/http"
+import { lege, rogaConsola, scribe } from "../builtins/io"
+import type { ContextusNativus } from "../builtins/types"
 import { AugurErratum, ErratumAerarii, ErratumExsecutionis, ErratumOraculi } from "../errors"
 import type { Expressio, OperatorBinarius, Programma, Sententia } from "../parser/ast"
 import { OraculumFictum } from "../providers/fake"
@@ -53,12 +56,14 @@ export interface OptionesAestimatoris {
   scaena?: Scaena
   oraculum?: Oraculum
   temperaturaDivina?: number
+  roga?: (invitatio: string) => Promise<string>
 }
 
 export class Aestimator {
   private readonly scaena: Scaena
   private readonly oraculum: Oraculum
   private readonly temperaturaDivina: number
+  private readonly roga: (invitatio: string) => Promise<string>
   private readonly pila = new PilaZonarum()
   private contextusCurrens: string[] = []
 
@@ -66,6 +71,16 @@ export class Aestimator {
     this.scaena = optiones.scaena ?? scaenaConsolae
     this.oraculum = optiones.oraculum ?? new OraculumFictum()
     this.temperaturaDivina = optiones.temperaturaDivina ?? 0.7
+    this.roga = optiones.roga ?? rogaConsola
+  }
+
+  private ctxNativus(): ContextusNativus {
+    return {
+      oraculum: this.oraculum,
+      zona: this.pila.apex(),
+      temperaturaDivina: this.temperaturaDivina,
+      contextus: this.contextusCurrens,
+    }
   }
 
   async curre(programma: Programma, ambitus: Ambitus = new Ambitus()): Promise<void> {
@@ -138,11 +153,13 @@ export class Aestimator {
       case "SententiaExpressionis":
         await this.aestima(s.expressio, amb)
         return
+      case "Scriptio":
+        scribe(await this.aestima(s.datum, amb), await this.aestima(s.fasciculus, amb))
+        return
       case "Communio":
       case "Inscriptio":
       case "Recensio":
       case "Expulsio":
-      case "Scriptio":
         throw new ErratumExsecutionis(`'${s.genus}' not yet implemented`)
     }
   }
@@ -328,11 +345,17 @@ export class Aestimator {
         return await this.aestimaDivinationem(e, amb)
       case "OperatioCollectionis":
         return await this.aestimaOperationemCollectionis(e, amb)
-      case "Petitio":
+      case "Petitio": {
+        const url = await this.aestima(e.url, amb)
+        const optiones = e.optiones ? await this.aestima(e.optiones, amb) : null
+        return await affer(this.ctxNativus(), url, optiones)
+      }
       case "Interrogatio":
+        return creaTextus(await this.roga(e.invitatio))
+      case "Lectio":
+        return lege(await this.aestima(e.fasciculus, amb))
       case "Consultatio":
       case "Memoria":
-      case "Lectio":
         throw new ErratumExsecutionis(`'${e.genus}' not yet implemented`)
     }
   }
@@ -348,13 +371,7 @@ export class Aestimator {
       rotuli = []
       for (const r of e.rotuli) rotuli.push(await this.aestima(r, amb))
     }
-    const ctx: ContextusNativus = {
-      oraculum: this.oraculum,
-      zona: this.pila.apex(),
-      temperaturaDivina: this.temperaturaDivina,
-      contextus: this.contextusCurrens,
-    }
-    return await operatioCollectionis(ctx, e.operatio, subiectum, e.criterium, rotuli)
+    return await operatioCollectionis(this.ctxNativus(), e.operatio, subiectum, e.criterium, rotuli)
   }
 
   private async divinaBinariam(op: OperatorBinarius, a: Valor, b: Valor): Promise<Valor> {
