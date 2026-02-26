@@ -1,4 +1,5 @@
 import { operatioCollectionis } from "../builtins/collections"
+import { Bancus } from "../builtins/db"
 import { affer } from "../builtins/http"
 import { lege, rogaConsola, scribe } from "../builtins/io"
 import type { ContextusNativus } from "../builtins/types"
@@ -56,6 +57,7 @@ export interface OptionesAestimatoris {
   scaena?: Scaena
   oraculum?: Oraculum
   temperaturaDivina?: number
+  spatiumMemoriae?: number
   roga?: (invitatio: string) => Promise<string>
 }
 
@@ -63,14 +65,17 @@ export class Aestimator {
   private readonly scaena: Scaena
   private readonly oraculum: Oraculum
   private readonly temperaturaDivina: number
+  private readonly spatiumMemoriae: number
   private readonly roga: (invitatio: string) => Promise<string>
   private readonly pila = new PilaZonarum()
   private contextusCurrens: string[] = []
+  private bancus: Bancus | null = null
 
   constructor(optiones: OptionesAestimatoris = {}) {
     this.scaena = optiones.scaena ?? scaenaConsolae
     this.oraculum = optiones.oraculum ?? new OraculumFictum()
     this.temperaturaDivina = optiones.temperaturaDivina ?? 0.7
+    this.spatiumMemoriae = optiones.spatiumMemoriae ?? 4000
     this.roga = optiones.roga ?? rogaConsola
   }
 
@@ -157,10 +162,20 @@ export class Aestimator {
         scribe(await this.aestima(s.datum, amb), await this.aestima(s.fasciculus, amb))
         return
       case "Communio":
+        this.bancus = new Bancus(s.locus, this.spatiumMemoriae)
+        return
       case "Inscriptio":
+        if (!this.bancus) return this.scaena.susurra("no database; commune first")
+        await this.bancus.inscribe(this.ctxNativus(), await this.aestima(s.datum, amb), s.collectio)
+        return
       case "Recensio":
+        if (!this.bancus) return this.scaena.susurra("no database; commune first")
+        this.bancus.recense(await this.aestima(s.scopus, amb), s.instructio)
+        return
       case "Expulsio":
-        throw new ErratumExsecutionis(`'${s.genus}' not yet implemented`)
+        if (!this.bancus) return this.scaena.susurra("no database; commune first")
+        this.bancus.expelle(s.descriptio, s.collectio)
+        return
     }
   }
 
@@ -355,8 +370,11 @@ export class Aestimator {
       case "Lectio":
         return lege(await this.aestima(e.fasciculus, amb))
       case "Consultatio":
+        if (!this.bancus) return fingeOraculum("RECUSATIO", "no database; commune first")
+        return await this.bancus.interroga(this.ctxNativus(), e.interrogatio)
       case "Memoria":
-        throw new ErratumExsecutionis(`'${e.genus}' not yet implemented`)
+        if (!this.bancus) return fingeOraculum("RECUSATIO", "no database; commune first")
+        return await this.bancus.memora(this.ctxNativus(), e.descriptio, e.collectio)
     }
   }
 
