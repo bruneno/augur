@@ -64,7 +64,7 @@ export interface OptionesAestimatoris {
 export class Aestimator {
   private readonly scaena: Scaena
   private readonly oraculum: Oraculum
-  private readonly temperaturaDivina: number
+  private temperaturaDivina: number
   private readonly spatiumMemoriae: number
   private readonly roga: (invitatio: string) => Promise<string>
   private readonly pila = new PilaZonarum()
@@ -148,6 +148,7 @@ export class Aestimator {
       case "BlocusZonae":
         return await this.exsequereBlocumZonae(s, amb)
       case "Praeceptum":
+        if (s.clavis === "temperature" && typeof s.valor === "number") this.temperaturaDivina = s.valor
         return
       case "Proclamatio":
         this.scaena.proclama(repraesenta(await this.aestima(s.expressio, amb)))
