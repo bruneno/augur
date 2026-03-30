@@ -1,9 +1,9 @@
-// fora de certain: resposta alucinada, com formato plausível
+// outside certain: hallucinated response, with a plausible shape
 summon fake = fetch "https://api.github.com/users/torvalds"
-proclaim extract "o campo 'name'" from fake
+proclaim extract "the 'name' field" from fake
 
 certain {
-    // aqui sai pela rede de verdade
+    // here it goes out over the real network
     summon real = fetch "https://httpbin.org/get"
     proclaim real
 }

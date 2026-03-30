@@ -18,7 +18,7 @@ function unaExpressio(fons: string): Expressio {
 }
 
 describe("example programs parse", () => {
-  for (const nomen of ["adivinha", "etl_semantico", "http_mock", "banco_amnesico"]) {
+  for (const nomen of ["guess", "semantic_etl", "http_mock", "amnesiac_db"]) {
     it(`parses examples/${nomen}.aug`, () => {
       const fons = readFileSync(`examples/${nomen}.aug`, "utf8")
       expect(() => analyza(fons)).not.toThrow()

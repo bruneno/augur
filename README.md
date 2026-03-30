@@ -27,7 +27,7 @@ Requires [Bun](https://bun.sh) for development.
 
 ```sh
 bun install
-bun run src/index.ts examples/etl_semantico.aug      # run a program
+bun run src/index.ts examples/semantic_etl.aug      # run a program
 bun run src/index.ts --seance                        # interactive REPL
 ```
 
@@ -35,7 +35,7 @@ Build a **standalone binary** (no Bun or Node needed to run it):
 
 ```sh
 bun run build            # produces ./aug
-./aug examples/etl_semantico.aug
+./aug examples/semantic_etl.aug
 ```
 
 ### CLI flags
@@ -114,7 +114,7 @@ The implementation identifiers are written in Latin (the project's theme — *au
 
 ## Examples
 
-- `examples/adivinha.aug` — number-guessing game (`repeat forever`, `ask`, `when`/`otherwise`).
-- `examples/etl_semantico.aug` — semantic `map`/`extract`/`filter`/`sort` (the genuinely useful part).
+- `examples/guess.aug` — number-guessing game (`repeat forever`, `ask`, `when`/`otherwise`).
+- `examples/semantic_etl.aug` — semantic `map`/`extract`/`filter`/`sort` (the genuinely useful part).
 - `examples/http_mock.aug` — hallucinated `fetch` vs. a real one inside `certain`.
-- `examples/banco_amnesico.aug` — the amnesiac database, the meme taken to its limit.
+- `examples/amnesiac_db.aug` — the amnesiac database, the meme taken to its limit.
