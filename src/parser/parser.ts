@@ -524,6 +524,9 @@ export class Grammaticus {
         return this.legeTabulam()
       case "DIVINE":
         return this.legeDivinationem()
+      case "GATHER":
+        this.progredere()
+        return { genus: "Congregatio", subiectum: this.legePostfixum() }
       case "FETCH":
         return this.legePetitionem()
       case "ASK":

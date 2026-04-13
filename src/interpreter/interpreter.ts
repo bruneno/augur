@@ -360,6 +360,8 @@ export class Aestimator {
         return await this.aestimaIndicium(e, amb)
       case "Coercio":
         return await this.aestimaCoercionem(e, amb)
+      case "Congregatio":
+        return await this.aestimaCongregationem(e, amb)
       case "Divinatio":
         return await this.aestimaDivinationem(e, amb)
       case "OperatioCollectionis":
@@ -519,6 +521,28 @@ export class Aestimator {
     if (!responsum.ratum) return fingeOraculum(responsum.causa)
     const divinatum = coerce(responsum.valor)
     return coerceNativa(divinatum, e.species) ?? divinatum
+  }
+
+  private async aestimaCongregationem(
+    e: Extract<Expressio, { genus: "Congregatio" }>,
+    amb: Ambitus,
+  ): Promise<Valor> {
+    const sub = e.subiectum
+    if (sub.genus === "LitteraAgminis") {
+      const valores = await Promise.all(sub.elementa.map((x) => this.aestima(x, amb)))
+      return creaAgmen(valores)
+    }
+    if (sub.genus === "OperatioCollectionis") {
+      const subiectum = await this.aestima(sub.subiectum, amb)
+      if (estOraculum(subiectum)) return subiectum
+      let rotuli: Valor[] | undefined
+      if (sub.rotuli) {
+        rotuli = []
+        for (const r of sub.rotuli) rotuli.push(await this.aestima(r, amb))
+      }
+      return await operatioCollectionis(this.ctxNativus(), sub.operatio, subiectum, sub.criterium, rotuli, true)
+    }
+    return await this.aestima(sub, amb)
   }
 }
 

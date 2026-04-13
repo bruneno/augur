@@ -453,6 +453,27 @@ proclaim count [1, 2, 3]          // 3 (native)
 > there). `sort` and `pick` degrade gracefully in `certain`: `sort` does a native
 > comparison sort and `pick` returns the first element.
 
+### Parallelism (`gather`)
+
+Element-wise collection ops call the oracle once per element, in order. For many
+independent calls that's slow — `gather` runs them concurrently instead.
+
+```aug
+// a bracketed list of expressions, evaluated in parallel
+summon facts = gather [
+  divine "the capital of France",
+  divine "the capital of Japan",
+  divine "the capital of Brazil",
+]
+
+// a parallel map / filter / classify (same result and order, just faster)
+summon translated = gather map articles with "translate to English"
+```
+
+> **Note** — `gather` preserves input order in the result even though the calls
+> race. The evaluator is async end-to-end, so this is real concurrency, not a
+> trick. Budget and cost still count every call.
+
 ### I/O
 
 | Form | Direction | Description |

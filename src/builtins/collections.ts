@@ -21,6 +21,7 @@ export async function operatioCollectionis(
   subiectum: Valor,
   criterium: string | undefined,
   rotuli: Valor[] | undefined,
+  parallelus = false,
 ): Promise<Valor> {
   switch (operatio) {
     case "count":
@@ -36,14 +37,25 @@ export async function operatioCollectionis(
     case "pick":
       return await selige(ctx, subiectum, criterium)
     case "filter":
-      return await cribra(ctx, subiectum, criterium)
+      return await cribra(ctx, subiectum, criterium, parallelus)
     case "map":
-      return await transforma(ctx, subiectum, criterium)
+      return await transforma(ctx, subiectum, criterium, parallelus)
     case "classify":
-      return await classifica(ctx, subiectum, rotuli ?? [])
+      return await classifica(ctx, subiectum, rotuli ?? [], parallelus)
     case "extract":
       return await extrahe(ctx, subiectum, criterium)
   }
+}
+
+async function perElementum<T>(
+  parallelus: boolean,
+  elementa: readonly Valor[],
+  fn: (elementum: Valor) => Promise<T>,
+): Promise<T[]> {
+  if (parallelus) return await Promise.all(elementa.map(fn))
+  const exitus: T[] = []
+  for (const elementum of elementa) exitus.push(await fn(elementum))
+  return exitus
 }
 
 function numera(v: Valor): Valor {
@@ -108,62 +120,78 @@ async function selige(ctx: ContextusNativus, subiectum: Valor, criterium: string
   })
 }
 
-async function cribra(ctx: ContextusNativus, subiectum: Valor, criterium: string | undefined): Promise<Valor> {
+async function cribra(
+  ctx: ContextusNativus,
+  subiectum: Valor,
+  criterium: string | undefined,
+  parallelus: boolean,
+): Promise<Valor> {
   if (subiectum.genus !== "agmen") return fingeOraculum("GENUS_DISCORS", `cannot filter ${subiectum.genus}`)
   if (ctx.zona.genus === "Certus") {
     return fingeOraculum("GENUS_DISCORS", "semantic filter needs the oracle; not available in certain")
   }
-  const servata: Valor[] = []
-  for (const elementum of subiectum.elementa) {
+  const iudicia = await perElementum(parallelus, subiectum.elementa, async (elementum) => {
     const responsum = await ctx.oraculum.divina(plenaRogatio(ctx, {
       genusOperationis: "filter",
       operandi: [summa(elementum)],
       instructio: criterium ?? "keep it?",
       genusExpectatum: "veritas",
     }))
-    if (responsum.ratum && estVerumCrudus(responsum.valor)) servata.push(elementum)
-  }
-  return creaAgmen(servata)
+    return responsum.ratum && estVerumCrudus(responsum.valor)
+  })
+  return creaAgmen(subiectum.elementa.filter((_, i) => iudicia[i]))
 }
 
-async function transforma(ctx: ContextusNativus, subiectum: Valor, criterium: string | undefined): Promise<Valor> {
+async function transforma(
+  ctx: ContextusNativus,
+  subiectum: Valor,
+  criterium: string | undefined,
+  parallelus: boolean,
+): Promise<Valor> {
   if (subiectum.genus !== "agmen") return fingeOraculum("GENUS_DISCORS", `cannot map ${subiectum.genus}`)
   if (ctx.zona.genus === "Certus") {
     return fingeOraculum("GENUS_DISCORS", "semantic map needs the oracle; not available in certain")
   }
-  const nova: Valor[] = []
-  for (const elementum of subiectum.elementa) {
+  const nova = await perElementum(parallelus, subiectum.elementa, async (elementum) => {
     const responsum = await ctx.oraculum.divina(plenaRogatio(ctx, {
       genusOperationis: "map",
       operandi: [summa(elementum)],
       instructio: criterium ?? "transform it",
     }))
-    nova.push(responsum.ratum ? coerce(responsum.valor) : fingeOraculum(responsum.causa))
-  }
+    return responsum.ratum ? coerce(responsum.valor) : fingeOraculum(responsum.causa)
+  })
   return creaAgmen(nova)
 }
 
-async function classifica(ctx: ContextusNativus, subiectum: Valor, rotuli: Valor[]): Promise<Valor> {
+async function classifica(
+  ctx: ContextusNativus,
+  subiectum: Valor,
+  rotuli: Valor[],
+  parallelus: boolean,
+): Promise<Valor> {
   if (subiectum.genus !== "agmen") return fingeOraculum("GENUS_DISCORS", `cannot classify ${subiectum.genus}`)
   if (ctx.zona.genus === "Certus") {
     return fingeOraculum("GENUS_DISCORS", "classify needs the oracle; not available in certain")
   }
   const nomina = rotuli.map((r) => repraesenta(r))
-  const tabula = new Map<string, Valor>()
-  for (const nomen of nomina) tabula.set(nomen, creaAgmen([]))
-  for (const elementum of subiectum.elementa) {
+  const rotulati = await perElementum(parallelus, subiectum.elementa, async (elementum) => {
     const responsum = await ctx.oraculum.divina(plenaRogatio(ctx, {
       genusOperationis: "classify",
       operandi: [summa(elementum)],
       instructio: `assign to exactly one of: ${nomina.join(", ")}`,
       genusExpectatum: "textus",
     }))
-    if (!responsum.ratum) continue
-    const rotulus = String(responsum.valor)
+    return responsum.ratum ? String(responsum.valor) : null
+  })
+  const tabula = new Map<string, Valor>()
+  for (const nomen of nomina) tabula.set(nomen, creaAgmen([]))
+  subiectum.elementa.forEach((elementum, i) => {
+    const rotulus = rotulati[i]
+    if (rotulus === null || rotulus === undefined) return
     const grex = tabula.get(rotulus)
     if (grex && grex.genus === "agmen") grex.elementa.push(elementum)
     else tabula.set(rotulus, creaAgmen([elementum]))
-  }
+  })
   return creaTabula(tabula)
 }
 

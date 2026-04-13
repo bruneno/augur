@@ -160,6 +160,11 @@ export interface Coercio {
   species: SpeciesExpectata
 }
 
+export interface Congregatio {
+  genus: "Congregatio"
+  subiectum: Expressio
+}
+
 export type Expressio =
   | LitteraNumeri
   | LitteraTextus
@@ -174,6 +179,7 @@ export type Expressio =
   | Vocatio
   | Indicium
   | Coercio
+  | Congregatio
   | Divinatio
   | Petitio
   | Interrogatio
