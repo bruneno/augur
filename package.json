@@ -3,9 +3,17 @@
   "version": "0.1.0",
   "description": "An interpreted language whose operations are divined by an LLM instead of computed",
   "type": "module",
+  "license": "MIT",
+  "keywords": ["llm", "ai", "language", "interpreter", "bun", "meme", "dsl"],
+  "homepage": "https://github.com/brunomoreno7538/augur",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunomoreno7538/augur.git"
+  },
   "bin": {
     "aug": "./src/index.ts"
   },
+  "files": ["src", "examples", "docs", "README.md", "LICENSE"],
   "scripts": {
     "dev": "bun run src/index.ts",
     "typecheck": "tsc --noEmit",

@@ -26,7 +26,8 @@ async function principium(): Promise<void> {
   let programma: Sententia[] | null = null
   let caput: PartesConfigurationis = {}
   if (opts.fasciculus) {
-    programma = analyza(readFileSync(opts.fasciculus, "utf8"))
+    const fons = opts.fasciculus === "-" ? readFileSync(0, "utf8") : readFileSync(opts.fasciculus, "utf8")
+    programma = analyza(fons)
     caput = extraheCaput(programma)
   }
 
@@ -51,7 +52,7 @@ async function principium(): Promise<void> {
       await aestimator.curre(programma)
     }
   } finally {
-    if (aerarium.vocationes > 0) {
+    if (!opts.silens && aerarium.vocationes > 0) {
       console.error(summariumPretii(aerarium.vocationes, aerarium.consumptio, config.exemplar))
     }
   }

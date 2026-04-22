@@ -41,19 +41,21 @@ bun run build            # produces ./aug
 ### CLI flags
 
 ```
-aug <file.aug> [options]
+aug <file.aug | -> [options]      # - reads the program from stdin
   --seance              interactive REPL
   --paranoid            log every AI call (prompt + response + cost)
-  --oracle <name>       anthropic | openai | ollama | fake
+  --quiet               suppress the end-of-run cost summary
+  --oracle <name>       anthropic | openai | openrouter | ollama | fake
   --model <id>          model id
   --temperature <n>     default temperature
   --budget <n>          ceiling on AI calls (kills runaway loops)
   --remember            cache divinations to disk (reproducible + cheap)
   --remember-file <p>   cache file path (default .augur-cache.json)
   --retry <n>           retries on a transient oracle error (default 2)
+  -v, --version         print version
 ```
 
-Flags override the `.aug` config header. Default oracle is `fake` (deterministic, offline).
+Flags override the `.aug` config header. Default oracle is `fake` (deterministic, offline). `proclaim` writes to stdout and the cost summary to stderr, so it pipes cleanly: `echo 'proclaim 2 + 2' | aug - --quiet`. Keys load from the environment or a `.env` file (see `.env.example`).
 
 **Reproducible & cheap runs.** `--remember` memoizes every divination to `.augur-cache.json`, keyed by the exact request. Re-running the same program replays cached answers — deterministic output, zero new tokens, no budget spent. Perfect for CI, demos, and not getting a surprise bill. Delete the file to re-roll the dice. (Caching is **off** by default — nondeterminism is the whole point.)
 

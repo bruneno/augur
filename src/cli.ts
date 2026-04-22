@@ -1,9 +1,11 @@
 import { Command } from "commander"
+import packageJson from "../package.json"
 
 export interface OptionesMandati {
   fasciculus: string | undefined
   seance: boolean
   paranoicus: boolean
+  silens: boolean
   oraculum: string | undefined
   exemplar: string | undefined
   temperatura: number | undefined
@@ -18,9 +20,11 @@ export function legeMandata(argv: string[]): OptionesMandati {
   program
     .name("aug")
     .description("Augur — a language whose operations are divined by an LLM instead of computed")
-    .argument("[file]", "path to a .aug program")
+    .version(packageJson.version, "-v, --version")
+    .argument("[file]", "path to a .aug program (use - to read from stdin)")
     .option("--seance", "interactive REPL", false)
     .option("--paranoid", "log every AI call (prompt + response + cost)", false)
+    .option("--quiet", "suppress the end-of-run cost summary", false)
     .option("--oracle <name>", "anthropic | openai | openrouter | ollama | fake")
     .option("--model <id>", "model id")
     .option("--temperature <n>", "default temperature", legeFractionem)
@@ -34,6 +38,7 @@ export function legeMandata(argv: string[]): OptionesMandati {
   const opts = program.opts<{
     seance?: boolean
     paranoid?: boolean
+    quiet?: boolean
     oracle?: string
     model?: string
     temperature?: number
@@ -47,6 +52,7 @@ export function legeMandata(argv: string[]): OptionesMandati {
     fasciculus: program.args[0],
     seance: opts.seance ?? false,
     paranoicus: opts.paranoid ?? false,
+    silens: opts.quiet ?? false,
     oraculum: opts.oracle,
     exemplar: opts.model,
     temperatura: opts.temperature,
