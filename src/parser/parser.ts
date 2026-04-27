@@ -220,11 +220,15 @@ export class Grammaticus {
     this.progredere()
     const expressio = this.legeExpressionem()
     let causa: string | undefined
-    if (this.inspice("BECAUSE")) {
+    let descriptio: string | undefined
+    if (this.inspice("IS")) {
+      this.progredere()
+      descriptio = this.expecta("STRING", "a description string").lexema
+    } else if (this.inspice("BECAUSE")) {
       this.progredere()
       causa = this.expecta("STRING", "a reason string").lexema
     }
-    return { genus: "Asseveratio", expressio, causa }
+    return { genus: "Asseveratio", expressio, causa, descriptio }
   }
 
   private legeConatum(): Sententia {

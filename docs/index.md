@@ -386,6 +386,20 @@ believe email != "" because "an email is required"
 A failed belief raises an error — `The oracle disagrees — <reason>` — which can
 be caught by `attempt`/`rescue`.
 
+**Semantic assertions (`is`).** `believe expr is "description"` asks the oracle
+to *judge* whether the value matches a natural-language description — a vibe-test
+for fuzzy output. It fails (raising `The oracle disagrees — <description>`) when
+the oracle says no. Inside `certain` it degrades to native truthiness.
+
+```aug
+believe reply is "polite and on-topic"
+believe summary is "under 200 characters and mentions the price"
+```
+
+> **Note** — this is how you test LLM-driven output in CI: assert the *shape* and
+> *vibe* of a result rather than an exact string. Pair it with `--remember` so
+> the judgement is cached and the test stays deterministic.
+
 ### Error handling
 
 `attempt { } rescue [as e] { }` runs a block and, on failure, runs the rescue

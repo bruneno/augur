@@ -260,6 +260,7 @@ export interface Asseveratio {
   genus: "Asseveratio"
   expressio: Expressio
   causa: string | undefined
+  descriptio: string | undefined
 }
 
 export interface Conatus {

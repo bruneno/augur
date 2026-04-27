@@ -20,6 +20,7 @@ export type GenusTesserae =
   | "CONTINUE"
   | "BELIEVE"
   | "BECAUSE"
+  | "IS"
   | "ATTEMPT"
   | "RESCUE"
   | "AS"
@@ -113,6 +114,7 @@ export const VERBA_RESERVATA: Readonly<Record<string, GenusTesserae>> = {
   continue: "CONTINUE",
   believe: "BELIEVE",
   because: "BECAUSE",
+  is: "IS",
   attempt: "ATTEMPT",
   rescue: "RESCUE",
   as: "AS",

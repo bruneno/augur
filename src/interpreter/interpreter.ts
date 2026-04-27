@@ -7,7 +7,7 @@ import { AugurErratum, ErratumAerarii, ErratumExsecutionis, ErratumOraculi } fro
 import type { Expressio, OperatorBinarius, Programma, Sententia } from "../parser/ast"
 import { OraculumFictum } from "../providers/fake"
 import type { Oraculum, Rogatio, SummariumOperandi } from "../providers/types"
-import { coerce, summa } from "./coercio"
+import { coerce, estVerumCrudus, summa } from "./coercio"
 import { Ambitus } from "./environment"
 import { coerceNativa, speciesDescriptio } from "./species"
 import { PilaZonarum, temperaturaPro, type Zona } from "./zones"
@@ -291,8 +291,31 @@ export class Aestimator {
     amb: Ambitus,
   ): Promise<void> {
     const valor = await this.aestima(s.expressio, amb)
+    if (s.descriptio !== undefined) {
+      return await this.asseveraSemantice(valor, s.descriptio)
+    }
     if (!estVerum(valor)) {
       throw new ErratumOraculi(s.causa)
+    }
+  }
+
+  private async asseveraSemantice(valor: Valor, descriptio: string): Promise<void> {
+    const zona = this.pila.apex()
+    if (zona.genus === "Certus") {
+      if (!estVerum(valor)) throw new ErratumOraculi(descriptio)
+      return
+    }
+    const rogatio: Rogatio = {
+      genusOperationis: "believe",
+      operandi: [summa(valor)],
+      instructio: `Judge whether this value is: ${descriptio}. Answer yes or no.`,
+      temperatura: temperaturaPro(zona, this.temperaturaDivina),
+      genusExpectatum: "veritas",
+      contextus: this.contextusCurrens,
+    }
+    const responsum = await this.oraculum.divina(rogatio)
+    if (!responsum.ratum || !estVerumCrudus(responsum.valor)) {
+      throw new ErratumOraculi(descriptio)
     }
   }
 
