@@ -1,7 +1,8 @@
 import type { SummariumOperandi, ValorCrudus } from "../providers/types"
-import { creaAgmen, creaNumerus, creaTabula, creaTextus, creaVeritas, praevisio, type Valor } from "./values"
+import { creaAgmen, creaNumerus, creaTabula, creaTextus, creaVeritas, NIHIL, praevisio, type Valor } from "./values"
 
-export function coerce(c: ValorCrudus): Valor {
+export function coerce(c: ValorCrudus | null | undefined): Valor {
+  if (c === null || c === undefined) return NIHIL
   if (typeof c === "number") return creaNumerus(c)
   if (typeof c === "boolean") return creaVeritas(c)
   if (typeof c === "string") return creaTextus(c)

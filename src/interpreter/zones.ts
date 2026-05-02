@@ -25,6 +25,13 @@ export class PilaZonarum {
   get altitudo(): number {
     return this.pila.length
   }
+
+  clona(): PilaZonarum {
+    const nova = new PilaZonarum()
+    nova.pila.length = 0
+    for (const zona of this.pila) nova.pila.push(zona)
+    return nova
+  }
 }
 
 export function temperaturaPro(zona: Zona, temperaturaDivina: number): number {

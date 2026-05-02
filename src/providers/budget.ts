@@ -64,6 +64,7 @@ export class OraculumIterans implements Oraculum {
         if (responsum.ratum || responsum.causa === "RECUSATIO") return responsum
         ultimum = responsum
       } catch (e) {
+        if (e instanceof ErratumAerarii) throw e
         ultimum = { ratum: false, causa: "ERROR_ORACULI" }
       }
     }

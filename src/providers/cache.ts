@@ -19,6 +19,7 @@ export class OraculumMemor implements Oraculum {
   }
 
   async divina(rogatio: Rogatio): Promise<Responsum> {
+    if (rogatio.sineMemoria) return await this.interior.divina(rogatio)
     const clavis = this.clavis(rogatio)
     const memoratum = this.tabula.get(clavis)
     if (memoratum !== undefined) return { ratum: true, valor: memoratum }

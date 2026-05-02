@@ -16,10 +16,10 @@ export function creaOraculum(
   optiones: OptionesCreandi = {},
 ): { oraculum: Oraculum; aerarium: Aerarium } {
   const fundamentum = creaFundamentum(config)
-  const iterans = config.conatus > 0 ? new OraculumIterans(fundamentum, config.conatus) : fundamentum
-  const interior = optiones.paranoicus ? new Diarium(iterans) : iterans
+  const interior = optiones.paranoicus ? new Diarium(fundamentum) : fundamentum
   const aerarium = new Aerarium(interior, config.aerarium)
-  const oraculum = config.memor ? new OraculumMemor(aerarium, config.fasciculusMemoriae) : aerarium
+  const iterans = config.conatus > 0 ? new OraculumIterans(aerarium, config.conatus) : aerarium
+  const oraculum = config.memor ? new OraculumMemor(iterans, config.fasciculusMemoriae) : iterans
   return { oraculum, aerarium }
 }
 

@@ -10,7 +10,6 @@ export class Bancus {
   private approxSigna = 0
   private readonly collectiones = new Set<string>()
   private motor: MotorBasis | null = null
-  private ultimaCausa: string | null = null
 
   constructor(
     readonly locus: string,
@@ -33,11 +32,11 @@ export class Bancus {
   async inscribe(ctx: ContextusNativus, datum: Valor, collectio: string): Promise<void> {
     this.collectiones.add(collectio)
     if (ctx.zona.genus === "Certus") {
-      this.ultimaCausa = null
       try {
         await this.machina().insere(collectio, valorAdJson(datum))
-      } catch (err) {
-        this.ultimaCausa = err instanceof Error ? err.message : String(err)
+      } catch {
+        // a failed write degrades the matching read to an oracle value; it must
+        // not poison reads of other collections, so nothing is cached here
       }
       return
     }
@@ -81,7 +80,6 @@ export class Bancus {
   }
 
   private async legeReale(collectio: string): Promise<Valor> {
-    if (this.ultimaCausa !== null) return fingeOraculum("ERROR_ORACULI", this.ultimaCausa)
     try {
       const ordines = await this.machina().lege(collectio)
       return creaAgmen(ordines.map(jsonAdValor))
@@ -91,7 +89,6 @@ export class Bancus {
   }
 
   private async interrogaReale(): Promise<Valor> {
-    if (this.ultimaCausa !== null) return fingeOraculum("ERROR_ORACULI", this.ultimaCausa)
     try {
       const omnia = await this.machina().legeOmnia(this.collectiones)
       const tabula = new Map<string, Valor>()

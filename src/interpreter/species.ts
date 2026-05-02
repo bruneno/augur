@@ -1,5 +1,16 @@
 import type { SpeciesExpectata } from "../parser/ast"
-import { creaAgmen, creaNumerus, creaTabula, creaTextus, creaVeritas, estVerum, repraesenta, type Valor } from "./values"
+import { estVerumCrudus } from "./coercio"
+import {
+  creaAgmen,
+  creaNumerus,
+  creaTabula,
+  creaTextus,
+  creaVeritas,
+  estOraculum,
+  estVerum,
+  repraesenta,
+  type Valor,
+} from "./values"
 
 export function speciesDescriptio(s: SpeciesExpectata): string {
   switch (s.genus) {
@@ -13,6 +24,7 @@ export function speciesDescriptio(s: SpeciesExpectata): string {
 }
 
 export function coerceNativa(v: Valor, s: SpeciesExpectata): Valor | null {
+  if (estOraculum(v)) return v
   switch (s.genus) {
     case "primitiva":
       return coercePrimitiva(v, s.nomen)
@@ -48,7 +60,7 @@ function coercePrimitiva(v: Valor, nomen: string): Valor | null {
     case "text":
       return creaTextus(repraesenta(v))
     case "bool":
-      return creaVeritas(estVerum(v))
+      return v.genus === "textus" ? creaVeritas(estVerumCrudus(v.textus)) : creaVeritas(estVerum(v))
     case "number":
       if (v.genus === "numerus") return v
       if (v.genus === "veritas") return creaNumerus(v.veritas ? 1 : 0)

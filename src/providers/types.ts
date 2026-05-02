@@ -24,6 +24,7 @@ export interface Rogatio {
   temperatura: number
   genusExpectatum?: string
   contextus: string[]
+  sineMemoria?: boolean
 }
 
 export type Responsum =

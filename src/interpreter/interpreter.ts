@@ -68,7 +68,7 @@ export class Aestimator {
   private temperaturaDivina: number
   private readonly spatiumMemoriae: number
   private readonly roga: (invitatio: string) => Promise<string>
-  private readonly pila = new PilaZonarum()
+  private pila = new PilaZonarum()
   private contextusCurrens: string[] = []
   private bancus: Bancus | null = null
 
@@ -87,6 +87,20 @@ export class Aestimator {
       temperaturaDivina: this.temperaturaDivina,
       contextus: this.contextusCurrens,
     }
+  }
+
+  private furca(): Aestimator {
+    const filia = new Aestimator({
+      scaena: this.scaena,
+      oraculum: this.oraculum,
+      temperaturaDivina: this.temperaturaDivina,
+      spatiumMemoriae: this.spatiumMemoriae,
+      roga: this.roga,
+    })
+    filia.pila = this.pila.clona()
+    filia.contextusCurrens = this.contextusCurrens
+    filia.bancus = this.bancus
+    return filia
   }
 
   async curre(programma: Programma, ambitus: Ambitus = new Ambitus()): Promise<void> {
@@ -432,6 +446,7 @@ export class Aestimator {
     }
     const responsum = await this.oraculum.divina(rogatio)
     if (!responsum.ratum) return fingeOraculum(responsum.causa)
+    if (rogatio.genusExpectatum === "veritas") return creaVeritas(estVerumCrudus(responsum.valor))
     return coerce(responsum.valor)
   }
 
@@ -460,7 +475,8 @@ export class Aestimator {
   }
 
   private async divinaConsensu(rogatio: Rogatio, numerus: number): Promise<Valor> {
-    const responsa = await Promise.all(Array.from({ length: numerus }, () => this.oraculum.divina(rogatio)))
+    const independens: Rogatio = { ...rogatio, sineMemoria: true }
+    const responsa = await Promise.all(Array.from({ length: numerus }, () => this.oraculum.divina(independens)))
     const valida: Valor[] = []
     for (const r of responsa) if (r.ratum) valida.push(coerce(r.valor))
     if (valida.length === 0) {
@@ -570,7 +586,10 @@ export class Aestimator {
     const responsum = await this.oraculum.divina(rogatio)
     if (!responsum.ratum) return fingeOraculum(responsum.causa)
     const divinatum = coerce(responsum.valor)
-    return coerceNativa(divinatum, e.species) ?? divinatum
+    return (
+      coerceNativa(divinatum, e.species) ??
+      fingeOraculum("GENUS_DISCORS", `could not coerce divined ${divinatum.genus} to ${descriptio}`)
+    )
   }
 
   private async aestimaCongregationem(
@@ -579,7 +598,7 @@ export class Aestimator {
   ): Promise<Valor> {
     const sub = e.subiectum
     if (sub.genus === "LitteraAgminis") {
-      const valores = await Promise.all(sub.elementa.map((x) => this.aestima(x, amb)))
+      const valores = await Promise.all(sub.elementa.map((x) => this.furca().aestima(x, amb)))
       return creaAgmen(valores)
     }
     if (sub.genus === "OperatioCollectionis") {
