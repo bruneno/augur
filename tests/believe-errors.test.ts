@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { ErratumAerarii, ErratumOraculi } from "../src/errors"
-import { Aestimator, type Scaena } from "../src/interpreter/interpreter"
-import { Aerarium } from "../src/providers/budget"
-import { OraculumFictum } from "../src/providers/fake"
-import type { Oraculum } from "../src/providers/types"
-import { analyza } from "../src/parser/parser"
+import { ErratumAerarii, ErratumOraculi } from "@/errors"
+import { Aestimator, type Scaena } from "@/interpreter/interpreter"
+import { Aerarium } from "@/providers/budget"
+import { OraculumFictum } from "@/providers/fake"
+import type { Oraculum } from "@/providers/types"
+import { analyza } from "@/parser/parser"
 
 async function curre(fons: string, oraculum: Oraculum = new OraculumFictum()): Promise<string[]> {
   const lineae: string[] = []

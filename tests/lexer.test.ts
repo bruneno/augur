@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { ErratumLectionis } from "../src/errors"
-import { tessellare } from "../src/lexer/lexer"
-import { VERBA_RESERVATA, type GenusTesserae } from "../src/lexer/tokens"
+import { ErratumLectionis } from "@/errors"
+import { tessellare } from "@/lexer/lexer"
+import { VERBA_RESERVATA, type GenusTesserae } from "@/lexer/tokens"
 
 function genera(fons: string): GenusTesserae[] {
   return tessellare(fons).map((t) => t.genus)

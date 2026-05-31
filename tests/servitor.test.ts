@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { analyza } from "../src/parser/parser"
-import { construeResponsionem, tractaPetitionem, type Manipulator } from "../src/builtins/servitor"
-import { creaNumerus, creaTabula, creaTextus, fingeOraculum, type Valor } from "../src/interpreter/values"
+import { analyza } from "@/parser/parser"
+import { construeResponsionem, tractaPetitionem, type Manipulator } from "@/builtins/servitor"
+import { creaNumerus, creaTabula, creaTextus, fingeOraculum, type Valor } from "@/interpreter/values"
 
 function tabula(entries: Record<string, Valor>): Valor {
   return creaTabula(new Map(Object.entries(entries)))

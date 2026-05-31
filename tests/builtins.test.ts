@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
-import { Aestimator, type Scaena } from "../src/interpreter/interpreter"
-import { OraculumFictum } from "../src/providers/fake"
-import type { Oraculum, Responsum, Rogatio } from "../src/providers/types"
-import { analyza } from "../src/parser/parser"
+import { Aestimator, type Scaena } from "@/interpreter/interpreter"
+import { OraculumFictum } from "@/providers/fake"
+import type { Oraculum, Responsum, Rogatio } from "@/providers/types"
+import { analyza } from "@/parser/parser"
 
 function scaenaCapiens(): { scaena: Scaena; lineae: string[] } {
   const lineae: string[] = []

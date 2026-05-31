@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import { createInterface } from "node:readline/promises"
-import { ErratumExsecutionis } from "../errors"
-import { creaTextus, repraesenta, type Valor } from "../interpreter/values"
+import { ErratumExsecutionis } from "@/errors"
+import { creaTextus, repraesenta, type Valor } from "@/interpreter/values"
 
 export function lege(fasciculus: Valor): Valor {
   if (fasciculus.genus !== "textus") {

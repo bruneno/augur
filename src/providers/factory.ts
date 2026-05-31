@@ -1,11 +1,11 @@
-import type { Configuratio } from "../config"
-import { OraculumAnthropicum } from "./anthropic"
-import { Aerarium, Diarium, OraculumIterans } from "./budget"
-import { OraculumMemor } from "./cache"
-import { OraculumFictum } from "./fake"
-import { OraculumOllama } from "./ollama"
-import { OraculumOpenAI } from "./openai"
-import type { Oraculum } from "./types"
+import type { Configuratio } from "@/config"
+import { OraculumAnthropicum } from "@/providers/anthropic"
+import { Aerarium, Diarium, OraculumIterans } from "@/providers/budget"
+import { OraculumMemor } from "@/providers/cache"
+import { OraculumFictum } from "@/providers/fake"
+import { OraculumOllama } from "@/providers/ollama"
+import { OraculumOpenAI } from "@/providers/openai"
+import type { Oraculum } from "@/providers/types"
 
 export interface OptionesCreandi {
   paranoicus?: boolean

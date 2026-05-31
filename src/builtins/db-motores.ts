@@ -6,7 +6,7 @@ import {
   creaVeritas,
   NIHIL,
   type Valor,
-} from "../interpreter/values"
+} from "@/interpreter/values"
 
 export interface OrdoCollectionis {
   collectio: string

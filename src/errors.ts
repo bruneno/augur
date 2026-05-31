@@ -29,7 +29,7 @@ export class ErratumExsecutionis extends AugurErratum {}
 
 export class ErratumOraculi extends AugurErratum {
   constructor(readonly causa?: string) {
-    super(causa ? `The oracle disagrees — ${causa}` : "The oracle disagrees")
+    super(causa ? `The oracle disagrees - ${causa}` : "The oracle disagrees")
   }
 }
 

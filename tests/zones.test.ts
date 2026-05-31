@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { PilaZonarum, temperaturaPro, TEMPERATURA_CHAOS, type Zona } from "../src/interpreter/zones"
+import { PilaZonarum, temperaturaPro, TEMPERATURA_CHAOS, type Zona } from "@/interpreter/zones"
 
 describe("PilaZonarum", () => {
   it("starts in the divine zone", () => {

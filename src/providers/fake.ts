@@ -1,4 +1,4 @@
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "./types"
+import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
 
 export interface OptionesFicti {
   defectus?: (rogatio: Rogatio) => boolean

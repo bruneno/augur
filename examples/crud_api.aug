@@ -1,4 +1,4 @@
-// A real CRUD over a persistent SQLite store, served over HTTP — plus one
+// A real CRUD over a persistent SQLite store, served over HTTP - plus one
 // deliberately divined route. Run it:
 //
 //   aug examples/crud_api.aug

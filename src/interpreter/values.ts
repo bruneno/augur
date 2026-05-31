@@ -1,5 +1,5 @@
-import type { OperatorBinarius, OperatorUnarius, Sententia } from "../parser/ast"
-import type { Ambitus } from "./environment"
+import type { OperatorBinarius, OperatorUnarius, Sententia } from "@/parser/ast"
+import type { Ambitus } from "@/interpreter/environment"
 
 export const CAUSAE_ORACULI = {
   RECUSATIO: "RECUSATIO",

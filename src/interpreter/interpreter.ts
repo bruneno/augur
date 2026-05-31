@@ -1,20 +1,20 @@
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { operatioCollectionis } from "../builtins/collections"
-import { Bancus } from "../builtins/db"
-import { affer } from "../builtins/http"
-import { lege, rogaConsola, scribe } from "../builtins/io"
-import { incipeServitorem } from "../builtins/servitor"
-import type { ContextusNativus } from "../builtins/types"
-import { AugurErratum, ErratumAerarii, ErratumExsecutionis, ErratumOraculi } from "../errors"
-import type { Expressio, OperatorBinarius, Programma, Sententia } from "../parser/ast"
-import { analyza } from "../parser/parser"
-import { OraculumFictum } from "../providers/fake"
-import type { Oraculum, Rogatio, SummariumOperandi } from "../providers/types"
-import { coerce, estVerumCrudus, summa } from "./coercio"
-import { Ambitus } from "./environment"
-import { coerceNativa, speciesDescriptio } from "./species"
-import { PilaZonarum, temperaturaPro, type Zona } from "./zones"
+import { operatioCollectionis } from "@/builtins/collections"
+import { Bancus } from "@/builtins/db"
+import { affer } from "@/builtins/http"
+import { lege, rogaConsola, scribe } from "@/builtins/io"
+import { incipeServitorem } from "@/builtins/servitor"
+import type { ContextusNativus } from "@/builtins/types"
+import { AugurErratum, ErratumAerarii, ErratumExsecutionis, ErratumOraculi } from "@/errors"
+import type { Expressio, OperatorBinarius, Programma, Sententia } from "@/parser/ast"
+import { analyza } from "@/parser/parser"
+import { OraculumFictum } from "@/providers/fake"
+import type { Oraculum, Rogatio, SummariumOperandi } from "@/providers/types"
+import { coerce, estVerumCrudus, summa } from "@/interpreter/coercio"
+import { Ambitus } from "@/interpreter/environment"
+import { coerceNativa, speciesDescriptio } from "@/interpreter/species"
+import { PilaZonarum, temperaturaPro, type Zona } from "@/interpreter/zones"
 import {
   creaAgmen,
   creaNumerus,
@@ -30,7 +30,7 @@ import {
   repraesenta,
   type Valor,
   type ValorRitus,
-} from "./values"
+} from "@/interpreter/values"
 
 export class SignumInterruptionis {}
 

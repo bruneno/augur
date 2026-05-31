@@ -1,5 +1,5 @@
-import { ErratumLectionis } from "../errors"
-import { VERBA_RESERVATA, type Tessera, type GenusTesserae } from "./tokens"
+import { ErratumLectionis } from "@/errors"
+import { VERBA_RESERVATA, type Tessera, type GenusTesserae } from "@/lexer/tokens"
 
 const FINIS = "\0"
 

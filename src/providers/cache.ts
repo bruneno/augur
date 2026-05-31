@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs"
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "./types"
+import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
 
 export class OraculumMemor implements Oraculum {
   private readonly tabula = new Map<string, ValorCrudus>()

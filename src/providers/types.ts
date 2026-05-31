@@ -1,4 +1,4 @@
-import type { CausaOraculi } from "../interpreter/values"
+import type { CausaOraculi } from "@/interpreter/values"
 
 export type ValorCrudus =
   | number

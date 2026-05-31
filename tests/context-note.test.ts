@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { Aestimator } from "../src/interpreter/interpreter"
-import type { Oraculum, Rogatio } from "../src/providers/types"
-import { analyza } from "../src/parser/parser"
+import { Aestimator } from "@/interpreter/interpreter"
+import type { Oraculum, Rogatio } from "@/providers/types"
+import { analyza } from "@/parser/parser"
 
 describe("context notes", () => {
   it("flows a /// note into the divination request of ops in the next statement", async () => {

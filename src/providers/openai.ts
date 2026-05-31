@@ -1,6 +1,6 @@
 import OpenAI from "openai"
-import { construePrompt, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "./prompt"
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "./types"
+import { construePrompt, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "@/providers/prompt"
+import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
 
 export interface OptionesClavisOpenAI {
   baseURL?: string

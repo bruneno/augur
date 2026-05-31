@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { OraculumIterans } from "../src/providers/budget"
-import type { Oraculum, Rogatio } from "../src/providers/types"
+import { OraculumIterans } from "@/providers/budget"
+import type { Oraculum, Rogatio } from "@/providers/types"
 
 const rog: Rogatio = { genusOperationis: "+", operandi: [], temperatura: 0, contextus: [] }
 

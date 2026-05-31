@@ -1,6 +1,6 @@
 import { Ollama } from "ollama"
-import { construePrompt, INSTRUCTIO_SYSTEMATIS } from "./prompt"
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "./types"
+import { construePrompt, INSTRUCTIO_SYSTEMATIS } from "@/providers/prompt"
+import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
 
 export class OraculumOllama implements Oraculum {
   private readonly clavis: Ollama

@@ -1,5 +1,5 @@
-import type { Zona } from "../interpreter/zones"
-import type { Oraculum } from "../providers/types"
+import type { Zona } from "@/interpreter/zones"
+import type { Oraculum } from "@/providers/types"
 
 export interface ContextusNativus {
   oraculum: Oraculum

@@ -3,11 +3,11 @@
 > An interpreted language whose operations are **divined by an LLM instead of computed**.
 
 Augur is a small, real programming language with one twist: the interpreter is
-100% deterministic — lexer, parser, scope, control flow, function calls — but the
+100% deterministic - lexer, parser, scope, control flow, function calls - but the
 *operations themselves* (arithmetic, comparison, collection transforms, even HTTP
 and the database) descend to an oracle (an LLM) that decides what the result
 should be. A meme premise on a serious tree-walking architecture. `2 + 2` is
-whatever the oracle says it is — unless you wrap it in `certain { }`, where it is
+whatever the oracle says it is - unless you wrap it in `certain { }`, where it is
 real, native, free, and always `4`.
 
 ```aug
@@ -61,7 +61,7 @@ bun run src/index.ts examples/semantic_etl.aug   # run a program
 bun run src/index.ts --seance                # interactive REPL (séance)
 ```
 
-A first program — `hello.aug`:
+A first program - `hello.aug`:
 
 ```aug
 /// the user's name is Bruno
@@ -69,7 +69,7 @@ summon greeting = divine "a warm one-line greeting"
 proclaim greeting
 
 certain {
-  proclaim 40 + 2     // always 42 — never touches the oracle
+  proclaim 40 + 2     // always 42 - never touches the oracle
 }
 ```
 
@@ -78,7 +78,7 @@ bun run src/index.ts hello.aug
 ```
 
 > **Note**
-> The default oracle is `fake` — a deterministic, offline stub used by the test
+> The default oracle is `fake` - a deterministic, offline stub used by the test
 > suite. Programs run with no API key and no network. Point at a real provider
 > with `oracle "anthropic"` in the file or `--oracle anthropic` on the CLI.
 
@@ -107,7 +107,7 @@ In the REPL, type one line at a time; `exit` or `quit` leaves the séance:
 
 ```text
 $ bun run src/index.ts --seance
-augur séance — type a line, or 'exit' to leave
+augur séance - type a line, or 'exit' to leave
 aug> certain { proclaim 2 + 2 }
 4
 aug> exit
@@ -144,16 +144,16 @@ where the operation sits, decided at op-time by the nearest enclosing block.
 |---|---|---|---|---|
 | **Divine** | *(default)* | The operation goes through the oracle at the configured temperature. Plausible, usually correct. | configured (default `0.7`) | yes |
 | **Chaos** | `chaos [N] { }` | High temperature; anarchy. `2 + 2` may yield `"fish"`. | `N`, or `1.2` if omitted | yes |
-| **Certain** | `certain { }` | Real, deterministic, native computation. No oracle, no tokens, no cost. | — | free |
+| **Certain** | `certain { }` | Real, deterministic, native computation. No oracle, no tokens, no cost. | - | free |
 
 > **The golden rule**
 > Control flow, scope, and ritual (function) calls are *always* resolved by the
 > deterministic evaluator. The oracle only decides **whether each step's result
-> is right** — never **what is computable**. Loops still loop, branches still
+> is right** - never **what is computable**. Loops still loop, branches still
 > branch, scopes still nest, regardless of zone.
 
 It is maximalist on purpose: even `fetch` and the database are divinable.
-Outside `certain`, a `fetch` never hits the network — the oracle hallucinates a
+Outside `certain`, a `fetch` never hits the network - the oracle hallucinates a
 plausible response. Inside `certain`, it hits the real server.
 
 ---
@@ -163,10 +163,10 @@ plausible response. Inside `certain`, it hits the real server.
 ### Comments & context notes
 
 ```aug
-// line comment — discarded
+// line comment - discarded
 /* block
-   comment — discarded */
-/// context note — NOT discarded
+   comment - discarded */
+/// context note - NOT discarded
 ```
 
 A `///` line is a **context note**. It is not thrown away: its text is collected
@@ -180,7 +180,7 @@ summon total = price * quantity
 
 ### Types
 
-Augur is vibe-typed — there are no type declarations, and any value can flow
+Augur is vibe-typed - there are no type declarations, and any value can flow
 anywhere. The value kinds are:
 
 | Type | Literal | Notes |
@@ -191,7 +191,7 @@ anywhere. The value kinds are:
 | list | `[1, 2, 3]` | Heterogeneous, zero-indexed. |
 | map | `{name: "Ana", age: 30}` | Keys are identifiers or strings. |
 | naught | `naught` | The absence of a value (null). |
-| **oracle** | *(not writable)* | The poison value — see below. |
+| **oracle** | *(not writable)* | The poison value - see below. |
 | ritual | *(via `ritual`)* | First-class function value. |
 
 Indexing reads from lists (by number) and maps (by text); out-of-range or
@@ -236,7 +236,7 @@ Assigning or forgetting an undefined name is a runtime error.
 ### Modules (`include`)
 
 `include "path/to/file.aug"` runs another file's top-level statements into the
-current scope, so its rituals and `summon`s become available — the way to split
+current scope, so its rituals and `summon`s become available - the way to split
 a program across files. Paths resolve from the working directory, and a given
 file is included at most once (re-including it is a no-op, so cycles are safe).
 
@@ -256,15 +256,15 @@ proclaim hash("hunter2")
 | Unary | `-` (negate), `not` |
 
 > **Note**
-> Binary arithmetic and comparison operators are **divined** outside `certain` —
+> Binary arithmetic and comparison operators are **divined** outside `certain` -
 > sent to the oracle as an operation. Inside `certain` they are computed
 > natively. The logical operators `and` / `or` (short-circuiting) and the unary
 > operators (`-`, `not`) are **always** native, in every zone.
 
 ```aug
-proclaim 2 + 2                 // divined — usually 4, sometimes not
-certain { proclaim 2 + 2 }     // native — always 4
-chaos { proclaim 2 + 2 }       // high temperature — who knows
+proclaim 2 + 2                 // divined - usually 4, sometimes not
+certain { proclaim 2 + 2 }     // native - always 4
+chaos { proclaim 2 + 2 }       // high temperature - who knows
 ```
 
 Precedence, lowest to highest: `or` → `and` → `not` → equality → comparison →
@@ -324,7 +324,7 @@ proclaim add(2, 3)
 A ritual with no `give` returns `naught`. Rituals close over their defining
 scope and can be passed around like any value.
 
-A **divined ritual** has no body — the entire implementation is delegated to the
+A **divined ritual** has no body - the entire implementation is delegated to the
 oracle. Its arguments become the operands; the oracle invents the result:
 
 ```aug
@@ -346,20 +346,20 @@ summon capital = divine "the capital city" upon "France"
 `divine "…" upon expr` divines *about* `expr`.
 
 Add **`thrice`** to run the divination three times in parallel and return the
-**majority** answer — a cheap self-consistency check that cuts down on one-off
+**majority** answer - a cheap self-consistency check that cuts down on one-off
 hallucinations. It pairs with `upon` and `as`:
 
 ```aug
 summon mood = divine "the overall sentiment" upon review thrice as text
 ```
 
-> **Note** — `thrice` costs three oracle calls (and counts three against your
-> budget). Use it where reliability matters more than spend — classification,
+> **Note** - `thrice` costs three oracle calls (and counts three against your
+> budget). Use it where reliability matters more than spend - classification,
 > extraction, anything you'd otherwise eyeball twice.
 
 ### Typed coercion (`as`)
 
-`expr as <type>` coerces a value to a requested shape — the bridge that makes
+`expr as <type>` coerces a value to a requested shape - the bridge that makes
 divined output safe to consume. Coercion is **native** when it can be (no oracle
 call), **divined** when it can't, and an **oracle value** inside `certain` when
 it's impossible.
@@ -381,7 +381,7 @@ summon scores = divine "five test scores" as [number]
 certain { proclaim "hello" as number }            // impossible → <oracle: …>
 ```
 
-> **Note** — native coercions never call the oracle, so `"42" as number` is free
+> **Note** - native coercions never call the oracle, so `"42" as number` is free
 > and deterministic. Only genuinely fuzzy conversions (`"a dozen" as number`)
 > reach the AI.
 
@@ -396,12 +396,12 @@ believe x > 0
 believe email != "" because "an email is required"
 ```
 
-A failed belief raises an error — `The oracle disagrees — <reason>` — which can
+A failed belief raises an error - `The oracle disagrees - <reason>` - which can
 be caught by `attempt`/`rescue`.
 
 **Semantic assertions (`is`).** `believe expr is "description"` asks the oracle
-to *judge* whether the value matches a natural-language description — a vibe-test
-for fuzzy output. It fails (raising `The oracle disagrees — <description>`) when
+to *judge* whether the value matches a natural-language description - a vibe-test
+for fuzzy output. It fails (raising `The oracle disagrees - <description>`) when
 the oracle says no. Inside `certain` it degrades to native truthiness.
 
 ```aug
@@ -409,7 +409,7 @@ believe reply is "polite and on-topic"
 believe summary is "under 200 characters and mentions the price"
 ```
 
-> **Note** — this is how you test LLM-driven output in CI: assert the *shape* and
+> **Note** - this is how you test LLM-driven output in CI: assert the *shape* and
 > *vibe* of a result rather than an exact string. Pair it with `--remember` so
 > the judgement is cached and the test stays deterministic.
 
@@ -418,13 +418,13 @@ believe summary is "under 200 characters and mentions the price"
 `attempt { } rescue [as e] { }` runs a block and, on failure, runs the rescue
 block. `as e` binds the error as an oracle value whose message is the failure
 text. Control-flow signals (`break`/`continue`/`give`) and budget-exceeded
-errors are **not** caught — they propagate through.
+errors are **not** caught - they propagate through.
 
 ```aug
 attempt {
   believe no because "this always fails"
 } rescue as e {
-  proclaim e        // <oracle: The oracle disagrees — this always fails>
+  proclaim e        // <oracle: The oracle disagrees - this always fails>
 }
 ```
 
@@ -435,13 +435,13 @@ through expressions silently until handled; a **thrown error** (a failed
 
 ### Zones
 
-`certain { }` forces native, deterministic execution for everything inside —
+`certain { }` forces native, deterministic execution for everything inside -
 arithmetic, comparisons, collections, fetch, and the database all become real.
 
 ```aug
 certain {
   proclaim 2 + 2                 // 4
-  proclaim sort [3, 1, 2]        // [1, 2, 3] — native sort
+  proclaim sort [3, 1, 2]        // [1, 2, 3] - native sort
 }
 ```
 
@@ -450,7 +450,7 @@ number it uses exactly that:
 
 ```aug
 chaos { proclaim 2 + 2 }      // temperature 1.2
-chaos 1.8 { proclaim 2 + 2 }  // temperature 1.8 — maximum chaos
+chaos 1.8 { proclaim 2 + 2 }  // temperature 1.8 - maximum chaos
 ```
 
 Zones nest; each block pushes onto a zone stack and pops on exit, so the active
@@ -495,7 +495,7 @@ proclaim count [1, 2, 3]          // 3 (native)
 ### Parallelism (`gather`)
 
 Element-wise collection ops call the oracle once per element, in order. For many
-independent calls that's slow — `gather` runs them concurrently instead.
+independent calls that's slow - `gather` runs them concurrently instead.
 
 ```aug
 // a bracketed list of expressions, evaluated in parallel
@@ -509,7 +509,7 @@ summon facts = gather [
 summon translated = gather map articles with "translate to English"
 ```
 
-> **Note** — `gather` preserves input order in the result even though the calls
+> **Note** - `gather` preserves input order in the result even though the calls
 > race. The evaluator is async end-to-end, so this is real concurrency, not a
 > trick. Budget and cost still count every call.
 
@@ -543,7 +543,7 @@ proclaim extract "the 'name' field" from res
 ```
 
 > **Note**
-> Outside `certain`, `fetch` **never touches the network** — the oracle
+> Outside `certain`, `fetch` **never touches the network** - the oracle
 > hallucinates a plausible response (status, headers, body). Inside `certain`,
 > it performs a **real** request and returns `{status, headers, body}`. A failed
 > real request yields an oracle value.
@@ -579,7 +579,7 @@ map with `status`) becomes a `200`. An oracle value becomes a `500`.
 Each request runs on an isolated fork of the evaluator, so concurrent requests
 can't leak **zones** or **`///` context** into each other. Module-scope state is
 **shared**, by design: top-level variables and database connections (pooled by
-connection string) persist across requests — that's what makes a CRUD work, and
+connection string) persist across requests - that's what makes a CRUD work, and
 why an in-memory `sqlite://` store keeps its data between requests. Per-request
 locals (`summon` inside the handler) are isolated; treat top-level `change`/`forget`
 as shared mutable state. Routes can be deterministic (`certain` + the database)
@@ -602,7 +602,7 @@ ritual handle(req) {
 serve 8787 with handle
 ```
 
-> **Note** — `serve` requires the Bun runtime (it uses `Bun.serve`); the
+> **Note** - `serve` requires the Bun runtime (it uses `Bun.serve`); the
 > standalone compiled binary serves fine. See `examples/crud_api.aug`.
 
 ### The database
@@ -631,12 +631,12 @@ proclaim query "list all remaining clients"
 
 #### The amnesiac model (outside `certain`)
 
-Outside `certain`, the database is **not** a store — it is a growing text
+Outside `certain`, the database is **not** a store - it is a growing text
 *journal*. Every `inscribe`, `revise`, and `banish` appends a line; every
 `recall`/`query` re-feeds the entire journal to the oracle and asks it to answer.
 Consequences, all intentional:
 
-- Persistence is fiction — there are no rows, only a remembered history.
+- Persistence is fiction - there are no rows, only a remembered history.
 - Two reads of the same thing can disagree.
 - When the journal exceeds the **context budget** (`spatiumMemoriae`, ~4000
   "tokens" by default), the **oldest lines are forgotten** to make room. Amnesia
@@ -644,7 +644,7 @@ Consequences, all intentional:
 
 #### The real engine (inside `certain`)
 
-Inside `certain`, the database talks to a **real engine** — chosen by the URL
+Inside `certain`, the database talks to a **real engine** - chosen by the URL
 scheme of `commune with`. Data actually persists: `inscribe` does an `INSERT`,
 `recall` does a `SELECT`, and `query` returns every collection as a map. Each
 collection becomes a table with a JSON column; collection names are validated
@@ -659,7 +659,7 @@ reaches raw SQL.
 | `"mysql://user:pass@host/db"` / `"mariadb://…"` | MySQL / MariaDB via `Bun.SQL`. |
 | anything else (e.g. `"vibes://…"`) | Treated as a label; falls back to **in-memory** SQLite in `certain`. |
 
-> **Note** — Postgres and MySQL use Bun's native SQL client, so the standalone
+> **Note** - Postgres and MySQL use Bun's native SQL client, so the standalone
 > binary needs no extra npm drivers. If the server is unreachable, the operation
 > degrades gracefully to an oracle value (`<oracle: …>`) instead of crashing.
 
@@ -709,24 +709,24 @@ aug <file.aug | -> [options]      # - reads the program from stdin
 
 | Flag | Argument | Description |
 |---|---|---|
-| `--seance` | — | Start the interactive REPL instead of running a file. |
-| `--paranoid` | — | Log every oracle call (operation, temperature, operands, instruction, response, tokens) to stderr. |
-| `--quiet` | — | Suppress the end-of-run cost summary (keeps stdout clean for pipes). |
+| `--seance` | - | Start the interactive REPL instead of running a file. |
+| `--paranoid` | - | Log every oracle call (operation, temperature, operands, instruction, response, tokens) to stderr. |
+| `--quiet` | - | Suppress the end-of-run cost summary (keeps stdout clean for pipes). |
 | `--oracle <name>` | `anthropic` \| `openai` \| `openrouter` \| `ollama` \| `fake` | Override the provider. |
 | `--model <id>` | model id | Override the model. |
 | `--temperature <n>` | number | Override the default temperature. |
 | `--budget <n>` | integer | Override the oracle-call ceiling (counts every real attempt, including retries). |
-| `--remember` | — | Cache divinations to disk for reproducible, cheaper re-runs. |
+| `--remember` | - | Cache divinations to disk for reproducible, cheaper re-runs. |
 | `--remember-file <path>` | path | Cache file path (default `.augur-cache.json`). |
 | `--retry <n>` | integer | Retries on a transient oracle error (default 2). |
-| `-v, --version` | — | Print the version. |
-| `--help` | — | Show usage. |
+| `-v, --version` | - | Print the version. |
+| `--help` | - | Show usage. |
 
 When a run makes at least one oracle call, a cost summary is printed to stderr at
 the end:
 
 ```text
-You spent R$0.0123 on 4 divination(s) — 512 in / 96 out tokens (claude-haiku-4-5).
+You spent R$0.0123 on 4 divination(s) - 512 in / 96 out tokens (claude-haiku-4-5).
 ```
 
 ---
@@ -742,10 +742,10 @@ You spent R$0.0123 on 4 divination(s) — 512 in / 96 out tokens (claude-haiku-4
 | `fake` | *(none)* | none | Deterministic offline stub used by the test suite. |
 
 > **Note**
-> API keys are read from the environment — never hardcoded. The end-of-run cost
+> API keys are read from the environment - never hardcoded. The end-of-run cost
 > counter is in **BRL** (USD × 5.0). It is priced for `claude-haiku-4-5`,
 > `gpt-4o-mini`, and `llama3.1`/`fake` (the latter two priced at 0). Unpriced
-> models — including all **OpenRouter** ids — read **R$0**; track real spend on
+> models - including all **OpenRouter** ids - read **R$0**; track real spend on
 > your provider's dashboard.
 
 Set the provider via header (`oracle "ollama"`) or flag (`--oracle ollama`):
@@ -762,22 +762,22 @@ ANTHROPIC_API_KEY=sk-... bun run src/index.ts app.aug --oracle anthropic
 Augur is four layers, with a hard wall between the deterministic core and the
 oracle:
 
-1. **Deterministic pipeline** — `Lector` (lexer) → `Grammaticus` (parser → AST)
+1. **Deterministic pipeline** - `Lector` (lexer) → `Grammaticus` (parser → AST)
    → `Aestimator` (tree-walking evaluator). Scope, control flow, and ritual
    dispatch never consult the oracle.
-2. **Zone stack** — `PilaZonarum` tracks the active zone (`Divinus` / `Chaos` /
+2. **Zone stack** - `PilaZonarum` tracks the active zone (`Divinus` / `Chaos` /
    `Certus`) per block, deciding whether each operation is divined, divined-hot,
    or computed natively.
-3. **Provider layer** — every backend implements a single `Oraculum.divina()`
+3. **Provider layer** - every backend implements a single `Oraculum.divina()`
    interface. A `Aerarium` (budget) wrapper enforces the call ceiling and tallies
    tokens; a `Diarium` (paranoid log) wrapper traces each call. The `fake`
    oracle makes the whole suite run offline.
-4. **Native builtins** — `Bancus` (database), `affer` (fetch), collection ops,
+4. **Native builtins** - `Bancus` (database), `affer` (fetch), collection ops,
    and file/console I/O. These run real code in `certain` and delegate to the
    oracle otherwise.
 
 > **Note**
-> Implementation identifiers are written in **Latin** (the *augur* theme — a
+> Implementation identifiers are written in **Latin** (the *augur* theme - a
 > Roman priest who divined: `Lector`, `Grammaticus`, `Aestimator`, `Bancus`,
 > `Oraculum`, `nomen`, `valor`, `linea`, `columna`). The `.aug` language keywords
 > and all user-facing text (errors, CLI, output) are in **English**.
@@ -788,7 +788,7 @@ oracle:
 
 ```sh
 bun run typecheck    # tsc --noEmit (strict)
-bun run test         # vitest run — fully offline on the fake oracle, no network
+bun run test         # vitest run - fully offline on the fake oracle, no network
 bun run build        # standalone binary
 ```
 
@@ -806,7 +806,7 @@ is the entire premise. For determinism, wrap the operation in `certain { }`,
 which uses real native computation.
 
 **Is caching on?**
-Off by default — every divined operation is a fresh oracle call, which is why the
+Off by default - every divined operation is a fresh oracle call, which is why the
 same expression can yield different values across runs. Pass `--remember` to
 memoize divinations to `.augur-cache.json` (a real result cache): re-running the
 same program then replays cached answers for reproducible, zero-token output.
@@ -822,6 +822,6 @@ any run that made oracle calls, and `--budget` caps the number of calls.
 **How does the database "forget"?**
 Outside `certain`, the database is a growing text journal that is re-fed to the
 oracle on every read. When the journal exceeds the context budget
-(`spatiumMemoriae`, ~4000 tokens), the oldest lines are dropped to fit — so old
+(`spatiumMemoriae`, ~4000 tokens), the oldest lines are dropped to fit - so old
 records silently vanish. Inside `certain`, a real engine (SQLite, PostgreSQL, or MySQL) is used and
 nothing is forgotten.

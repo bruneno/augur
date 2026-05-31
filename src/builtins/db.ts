@@ -1,9 +1,9 @@
-import { coerce } from "../interpreter/coercio"
-import { temperaturaPro } from "../interpreter/zones"
-import { creaAgmen, creaTabula, fingeOraculum, repraesenta, type Valor } from "../interpreter/values"
-import type { Rogatio } from "../providers/types"
-import { creaMotor, jsonAdValor, type MotorBasis, valorAdJson } from "./db-motores"
-import type { ContextusNativus } from "./types"
+import { coerce } from "@/interpreter/coercio"
+import { temperaturaPro } from "@/interpreter/zones"
+import { creaAgmen, creaTabula, fingeOraculum, repraesenta, type Valor } from "@/interpreter/values"
+import type { Rogatio } from "@/providers/types"
+import { creaMotor, jsonAdValor, type MotorBasis, valorAdJson } from "@/builtins/db-motores"
+import type { ContextusNativus } from "@/builtins/types"
 
 export class Bancus {
   private readonly annales: string[] = []

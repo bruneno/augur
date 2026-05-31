@@ -1,6 +1,6 @@
-import type { OperatioCollectionisGenus } from "../parser/ast"
-import { coerce, estVerumCrudus, summa } from "../interpreter/coercio"
-import { temperaturaPro } from "../interpreter/zones"
+import type { OperatioCollectionisGenus } from "@/parser/ast"
+import { coerce, estVerumCrudus, summa } from "@/interpreter/coercio"
+import { temperaturaPro } from "@/interpreter/zones"
 import {
   creaAgmen,
   creaNumerus,
@@ -11,9 +11,9 @@ import {
   repraesenta,
   suntAequales,
   type Valor,
-} from "../interpreter/values"
-import type { Rogatio } from "../providers/types"
-import type { ContextusNativus } from "./types"
+} from "@/interpreter/values"
+import type { Rogatio } from "@/providers/types"
+import type { ContextusNativus } from "@/builtins/types"
 
 export async function operatioCollectionis(
   ctx: ContextusNativus,

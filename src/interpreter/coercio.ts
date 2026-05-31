@@ -1,5 +1,5 @@
-import type { SummariumOperandi, ValorCrudus } from "../providers/types"
-import { creaAgmen, creaNumerus, creaTabula, creaTextus, creaVeritas, NIHIL, praevisio, type Valor } from "./values"
+import type { SummariumOperandi, ValorCrudus } from "@/providers/types"
+import { creaAgmen, creaNumerus, creaTabula, creaTextus, creaVeritas, NIHIL, praevisio, type Valor } from "@/interpreter/values"
 
 export function coerce(c: ValorCrudus | null | undefined): Valor {
   if (c === null || c === undefined) return NIHIL

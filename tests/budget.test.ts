@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
-import { ErratumAerarii } from "../src/errors"
-import { Aerarium } from "../src/providers/budget"
-import { OraculumFictum } from "../src/providers/fake"
-import type { Rogatio } from "../src/providers/types"
+import { ErratumAerarii } from "@/errors"
+import { Aerarium } from "@/providers/budget"
+import { OraculumFictum } from "@/providers/fake"
+import type { Rogatio } from "@/providers/types"
 
 const rog: Rogatio = { genusOperationis: "+", operandi: [], temperatura: 0, contextus: [] }
 

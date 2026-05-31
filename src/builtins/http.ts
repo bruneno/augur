@@ -1,8 +1,8 @@
-import { coerce } from "../interpreter/coercio"
-import { temperaturaPro } from "../interpreter/zones"
-import { creaNumerus, creaTabula, creaTextus, fingeOraculum, type Valor } from "../interpreter/values"
-import type { Rogatio } from "../providers/types"
-import type { ContextusNativus } from "./types"
+import { coerce } from "@/interpreter/coercio"
+import { temperaturaPro } from "@/interpreter/zones"
+import { creaNumerus, creaTabula, creaTextus, fingeOraculum, type Valor } from "@/interpreter/values"
+import type { Rogatio } from "@/providers/types"
+import type { ContextusNativus } from "@/builtins/types"
 
 export async function affer(ctx: ContextusNativus, url: Valor, optiones: Valor | null): Promise<Valor> {
   if (url.genus !== "textus") return fingeOraculum("GENUS_DISCORS", "fetch expects a URL string")

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { Aestimator, type Scaena } from "../src/interpreter/interpreter"
-import type { Oraculum, ValorCrudus } from "../src/providers/types"
-import { analyza } from "../src/parser/parser"
+import { Aestimator, type Scaena } from "@/interpreter/interpreter"
+import type { Oraculum, ValorCrudus } from "@/providers/types"
+import { analyza } from "@/parser/parser"
 
 async function curreCum(fons: string, oraculum: Oraculum): Promise<string[]> {
   const lineae: string[] = []

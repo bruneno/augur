@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk"
-import { construePrompt, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "./prompt"
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "./types"
+import { construePrompt, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "@/providers/prompt"
+import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
 
 const NOMEN_INSTRUMENTI = "divine_result"
 

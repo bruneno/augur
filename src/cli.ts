@@ -1,5 +1,5 @@
 import { Command } from "commander"
-import packageJson from "../package.json"
+import packageJson from "~/package.json"
 
 export interface OptionesMandati {
   fasciculus: string | undefined
@@ -19,7 +19,7 @@ export function legeMandata(argv: string[]): OptionesMandati {
   const program = new Command()
   program
     .name("aug")
-    .description("Augur — a language whose operations are divined by an LLM instead of computed")
+    .description("Augur - a language whose operations are divined by an LLM instead of computed")
     .version(packageJson.version, "-v, --version")
     .argument("[file]", "path to a .aug program (use - to read from stdin)")
     .option("--seance", "interactive REPL", false)

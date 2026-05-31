@@ -1,4 +1,4 @@
-import type { Rogatio } from "./types"
+import type { Rogatio } from "@/providers/types"
 
 export const INSTRUCTIO_SYSTEMATIS =
   "You are the oracle of Augur, a programming language whose operations are divined rather than computed. " +

@@ -1,13 +1,13 @@
 import { createInterface } from "node:readline/promises"
-import { AugurErratum } from "./errors"
-import { Ambitus } from "./interpreter/environment"
-import { Aestimator } from "./interpreter/interpreter"
-import { analyza } from "./parser/parser"
+import { AugurErratum } from "@/errors"
+import { Ambitus } from "@/interpreter/environment"
+import { Aestimator } from "@/interpreter/interpreter"
+import { analyza } from "@/parser/parser"
 
 export async function incipeSessionem(aestimator: Aestimator): Promise<void> {
   const rl = createInterface({ input: process.stdin, output: process.stdout })
   const ambitus = new Ambitus()
-  console.log("augur séance — type a line, or 'exit' to leave")
+  console.log("augur séance - type a line, or 'exit' to leave")
   try {
     for (;;) {
       const linea = (await rl.question("aug> ")).trim()

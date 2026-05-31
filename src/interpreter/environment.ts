@@ -1,5 +1,5 @@
-import { ErratumExsecutionis } from "../errors"
-import type { Valor } from "./values"
+import { ErratumExsecutionis } from "@/errors"
+import type { Valor } from "@/interpreter/values"
 
 export class Ambitus {
   private readonly vincula = new Map<string, Valor>()

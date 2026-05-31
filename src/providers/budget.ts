@@ -1,5 +1,5 @@
-import { ErratumAerarii } from "../errors"
-import type { Consumptio, Oraculum, Responsum, Rogatio } from "./types"
+import { ErratumAerarii } from "@/errors"
+import type { Consumptio, Oraculum, Responsum, Rogatio } from "@/providers/types"
 
 export class Aerarium implements Oraculum {
   private numerus = 0

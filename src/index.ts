@@ -1,14 +1,14 @@
 #!/usr/bin/env bun
 import { readFileSync } from "node:fs"
-import { legeMandata } from "./cli"
-import { componeConfigurationem, extraheCaput, type PartesConfigurationis } from "./config"
-import { summariumPretii } from "./cost"
-import { AugurErratum } from "./errors"
-import { Aestimator } from "./interpreter/interpreter"
-import type { Sententia } from "./parser/ast"
-import { analyza } from "./parser/parser"
-import { creaOraculum } from "./providers/factory"
-import { incipeSessionem } from "./repl"
+import { legeMandata } from "@/cli"
+import { componeConfigurationem, extraheCaput, type PartesConfigurationis } from "@/config"
+import { summariumPretii } from "@/cost"
+import { AugurErratum } from "@/errors"
+import { Aestimator } from "@/interpreter/interpreter"
+import type { Sententia } from "@/parser/ast"
+import { analyza } from "@/parser/parser"
+import { creaOraculum } from "@/providers/factory"
+import { incipeSessionem } from "@/repl"
 
 async function principium(): Promise<void> {
   const opts = legeMandata(process.argv.slice(2))

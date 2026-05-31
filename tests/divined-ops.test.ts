@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { ErratumAerarii } from "../src/errors"
-import { Aestimator, type Scaena } from "../src/interpreter/interpreter"
-import { Aerarium } from "../src/providers/budget"
-import { OraculumFictum } from "../src/providers/fake"
-import { analyza } from "../src/parser/parser"
+import { ErratumAerarii } from "@/errors"
+import { Aestimator, type Scaena } from "@/interpreter/interpreter"
+import { Aerarium } from "@/providers/budget"
+import { OraculumFictum } from "@/providers/fake"
+import { analyza } from "@/parser/parser"
 
 function collector(): { scaena: Scaena; lineae: string[] } {
   const lineae: string[] = []

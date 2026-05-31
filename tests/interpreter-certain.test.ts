@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { ErratumOraculi } from "../src/errors"
-import { Aestimator, type Scaena } from "../src/interpreter/interpreter"
-import { analyza } from "../src/parser/parser"
+import { ErratumOraculi } from "@/errors"
+import { Aestimator, type Scaena } from "@/interpreter/interpreter"
+import { analyza } from "@/parser/parser"
 
 async function curre(fons: string): Promise<string[]> {
   const lineae: string[] = []

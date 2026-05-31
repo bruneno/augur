@@ -1,10 +1,10 @@
 # Augur
 
 <p align="center">
-  <img src="assets/augur.png" alt="An augur — the Roman priest who read omens from the flight of birds" width="240">
+  <img src="assets/augur.png" alt="An augur - the Roman priest who read omens from the flight of birds" width="240">
 </p>
 
-An interpreted programming language whose **operations are divined by an LLM instead of computed**. A meme premise with a serious architecture: the interpreter is 100% deterministic — only the *operations* descend to the AI.
+An interpreted programming language whose **operations are divined by an LLM instead of computed**. A meme premise with a serious architecture: the interpreter is 100% deterministic - only the *operations* descend to the AI.
 
 ```
 summon secret = divine "pick a number from 1 to 100"
@@ -23,7 +23,7 @@ Every operation runs in one of three zones, decided at op-time:
 
 The golden rule: control flow, scope, and function calls are resolved by a normal tree-walking evaluator. The AI only decides *whether each step's result is right*, never *what is computable*.
 
-It is maximalist: even `fetch` (HTTP) and the database are divinable. Outside `certain`, a `fetch` never hits the network — the oracle hallucinates a plausible response. Inside `certain`, it hits the real server.
+It is maximalist: even `fetch` (HTTP) and the database are divinable. Outside `certain`, a `fetch` never hits the network - the oracle hallucinates a plausible response. Inside `certain`, it hits the real server.
 
 ## Install & run
 
@@ -61,7 +61,7 @@ aug <file.aug | -> [options]      # - reads the program from stdin
 
 Flags override the `.aug` config header. Default oracle is `fake` (deterministic, offline). `proclaim` writes to stdout and the cost summary to stderr, so it pipes cleanly: `echo 'proclaim 2 + 2' | aug - --quiet`. Keys load from the environment or a `.env` file (see `.env.example`).
 
-**Reproducible & cheap runs.** `--remember` memoizes every divination to `.augur-cache.json`, keyed by the exact request. Re-running the same program replays cached answers — deterministic output, zero new tokens, no budget spent. Perfect for CI, demos, and not getting a surprise bill. Delete the file to re-roll the dice. (Caching is **off** by default — nondeterminism is the whole point.)
+**Reproducible & cheap runs.** `--remember` memoizes every divination to `.augur-cache.json`, keyed by the exact request. Re-running the same program replays cached answers - deterministic output, zero new tokens, no budget spent. Perfect for CI, demos, and not getting a surprise bill. Delete the file to re-roll the dice. (Caching is **off** by default - nondeterminism is the whole point.)
 
 ### Providers
 
@@ -71,11 +71,11 @@ Flags override the `.aug` config header. Default oracle is `fake` (deterministic
 | `openai` | `gpt-4o-mini` | `OPENAI_API_KEY` |
 | `openrouter` | `openai/gpt-4o-mini` | `OPENROUTER_API_KEY` |
 | `ollama` | `llama3.1` | local, `OLLAMA_HOST` (optional) |
-| `fake` | — | none (used by the test suite) |
+| `fake` | - | none (used by the test suite) |
 
 `openrouter` is OpenAI-compatible (`https://openrouter.ai/api/v1`); use any OpenRouter model id via `--model`, e.g. `--oracle openrouter --model anthropic/claude-3.5-haiku`. The end-of-run BRL counter reads `0` for OpenRouter (billing is tracked on your OpenRouter dashboard).
 
-Keys are read from the environment — never hardcoded. `oracle "ollama"` runs 100% locally.
+Keys are read from the environment - never hardcoded. `oracle "ollama"` runs 100% locally.
 
 ## Language tour
 
@@ -85,7 +85,7 @@ temperature 0.4
 
 summon x = 10               // declare; `x = 20` reassigns; `forget x` removes
 ritual add(a, b) { give a + b }
-ritual guess(n) divined     // no body — the whole impl is divined
+ritual guess(n) divined     // no body - the whole impl is divined
 
 when x > 5 -> proclaim "big"
 otherwise  -> proclaim "small"
@@ -107,15 +107,15 @@ chaos 0.9 { proclaim 2 + 2 } // who knows
 
 **Parallelism**: `gather [a, b, c]` evaluates the expressions concurrently; `gather map xs with "…"` (also `filter`/`classify`) runs the per-element divinations in parallel. Same results and order, far faster when you have many independent oracle calls.
 
-**Divination primitive**: `divine "instruction"` and `divine "instruction" upon expr`. Add `thrice` to consult the oracle three times in parallel and take the majority — cheap self-consistency: `divine "the sentiment" upon review thrice`.
+**Divination primitive**: `divine "instruction"` and `divine "instruction" upon expr`. Add `thrice` to consult the oracle three times in parallel and take the majority - cheap self-consistency: `divine "the sentiment" upon review thrice`.
 
-**Typed coercion**: `expr as <type>` — `number`, `text`, `bool`, `list`, `map`, `[T]`, or `{field: T, …}`. Coerced natively when possible (`"42" as number`), divined when not (`"twelve dozen" as number`), and an oracle value inside `certain` if impossible. This is what makes divined output safe to use: `divine "the user" as {name: text, age: number}`.
+**Typed coercion**: `expr as <type>` - `number`, `text`, `bool`, `list`, `map`, `[T]`, or `{field: T, …}`. Coerced natively when possible (`"42" as number`), divined when not (`"twelve dozen" as number`), and an oracle value inside `certain` if impossible. This is what makes divined output safe to use: `divine "the user" as {name: text, age: number}`.
 
-**Vibe-tests**: `believe expr is "description"` — the oracle judges whether `expr` matches a natural-language description and fails the assertion if not (`believe reply is "polite and on-topic"`). Plain `believe expr [because "…"]` stays native truthiness. A way to test fuzzy LLM output in CI.
+**Vibe-tests**: `believe expr is "description"` - the oracle judges whether `expr` matches a natural-language description and fails the assertion if not (`believe reply is "polite and on-topic"`). Plain `believe expr [because "…"]` stays native truthiness. A way to test fuzzy LLM output in CI.
 
 **I/O**: `ask`, `proclaim`, `whisper`, `read`, `write … to …`.
 
-**HTTP server**: `serve <port> with <ritual>` runs a REST API. The handler gets a request map `{method, path, query, headers, body, json}` (`json` is the parsed body) and returns `{status, body, headers?}` — `body` as text stays text, a map/list becomes JSON. Routes can be deterministic (`certain` + the database) or divined. A real persistent CRUD lives in `examples/crud_api.aug`:
+**HTTP server**: `serve <port> with <ritual>` runs a REST API. The handler gets a request map `{method, path, query, headers, body, json}` (`json` is the parsed body) and returns `{status, body, headers?}` - `body` as text stays text, a map/list becomes JSON. Routes can be deterministic (`certain` + the database) or divined. A real persistent CRUD lives in `examples/crud_api.aug`:
 
 ```
 ritual handle(req) {
@@ -133,27 +133,31 @@ ritual handle(req) {
 serve 8787 with handle
 ```
 
-**Database** (`vibes://…`): `commune with`, `inscribe … into`, `recall … from`, `revise … with`, `banish … from`, `query`. Outside `certain` the database is a growing text journal re-fed to the oracle on every read — so persistence is fiction, reads can disagree, and when the journal overflows the context budget **the oldest records are forgotten** (amnesia is a feature). Inside `certain`, it uses a real `bun:sqlite` engine and data persists.
+**Database** (`vibes://…`): `commune with`, `inscribe … into`, `recall … from`, `revise … with`, `banish … from`, `query`. Outside `certain` the database is a growing text journal re-fed to the oracle on every read - so persistence is fiction, reads can disagree, and when the journal overflows the context budget **the oldest records are forgotten** (amnesia is a feature). Inside `certain`, it uses a real `bun:sqlite` engine and data persists.
 
-**Modules**: `include "lib/foo.aug"` runs another file's top-level definitions into the current scope (resolved from the working directory, included at most once) — split a big program across files.
+**Modules**: `include "lib/foo.aug"` runs another file's top-level definitions into the current scope (resolved from the working directory, included at most once) - split a big program across files.
 
-**Context notes**: `/// note` lines are not discarded — they are injected into the AI prompt for the operations that follow.
+**Context notes**: `/// note` lines are not discarded - they are injected into the AI prompt for the operations that follow.
 
 ## Development
 
 ```sh
 bun run typecheck    # tsc --noEmit (Bun does not type-check on its own)
-bun run test         # vitest, entirely on the fake oracle — no network
+bun run test         # vitest, entirely on the fake oracle - no network
 bun run build        # standalone binary
 ```
 
-The implementation identifiers are written in Latin (the project's theme — *augur* was a Roman priest who divined); the `.aug` language keywords and all user-facing text are in English.
+The implementation identifiers are written in Latin (the project's theme - *augur* was a Roman priest who divined); the `.aug` language keywords and all user-facing text are in English.
 
 ## Examples
 
-- `examples/crud_api.aug` — a persistent REST CRUD over SQLite served with `serve`, plus a divined route.
-- `examples/triage.aug` — a support-desk triager: parallel `classify`/`filter`, typed extraction (`as`), `thrice`, and per-ticket replies (the genuinely-useful side, end to end).
-- `examples/guess.aug` — number-guessing game (`repeat forever`, `ask`, `when`/`otherwise`).
-- `examples/semantic_etl.aug` — semantic `map`/`extract`/`filter`/`sort` (the genuinely useful part).
-- `examples/http_mock.aug` — hallucinated `fetch` vs. a real one inside `certain`.
-- `examples/amnesiac_db.aug` — the amnesiac database, the meme taken to its limit.
+- `examples/crud_api.aug` - a persistent REST CRUD over SQLite served with `serve`, plus a divined route.
+- `examples/triage.aug` - a support-desk triager: parallel `classify`/`filter`, typed extraction (`as`), `thrice`, and per-ticket replies (the genuinely-useful side, end to end).
+- `examples/guess.aug` - number-guessing game (`repeat forever`, `ask`, `when`/`otherwise`).
+- `examples/semantic_etl.aug` - semantic `map`/`extract`/`filter`/`sort` (the genuinely useful part).
+- `examples/http_mock.aug` - hallucinated `fetch` vs. a real one inside `certain`.
+- `examples/amnesiac_db.aug` - the amnesiac database, the meme taken to its limit.
+
+## Built with Augur
+
+- [augur-auth-demo](https://github.com/bruneno/augur-auth-demo) - a user/password auth API (register · authenticate · list-users) written almost entirely in `divine`: the LLM is the SHA-256 hash, the credential checker, the token generator, and the router. Only persistence is deterministic (real MySQL via `certain`). Split across files with `include`. A joke about LLM-driven software - do not deploy it.

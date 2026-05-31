@@ -1,4 +1,4 @@
-import type { Sententia } from "./parser/ast"
+import type { Sententia } from "@/parser/ast"
 
 export interface Configuratio {
   oraculum: string

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { computaPretiumBRL, summariumPretii } from "../src/cost"
+import { computaPretiumBRL, summariumPretii } from "@/cost"
 
 describe("cost", () => {
   it("computes BRL cost for the haiku model", () => {

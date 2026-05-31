@@ -2,8 +2,8 @@ import { mkdtempSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
-import { OraculumMemor } from "../src/providers/cache"
-import type { Oraculum, Rogatio } from "../src/providers/types"
+import { OraculumMemor } from "@/providers/cache"
+import type { Oraculum, Rogatio } from "@/providers/types"
 
 function rog(op = "+"): Rogatio {
   return { genusOperationis: op, operandi: [{ genus: "numerus", praevisio: "2" }], temperatura: 0, contextus: [] }

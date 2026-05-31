@@ -1,5 +1,5 @@
-import { creaTabula, creaTextus, estOraculum, NIHIL, type Valor } from "../interpreter/values"
-import { jsonAdValor, valorAdJson } from "./db-motores"
+import { creaTabula, creaTextus, estOraculum, NIHIL, type Valor } from "@/interpreter/values"
+import { jsonAdValor, valorAdJson } from "@/builtins/db-motores"
 
 export type Manipulator = (petitio: Valor) => Promise<Valor>
 

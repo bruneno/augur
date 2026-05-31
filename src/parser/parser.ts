@@ -1,6 +1,6 @@
-import { ErratumGrammaticae } from "../errors"
-import { tessellare } from "../lexer/lexer"
-import type { GenusTesserae, Tessera } from "../lexer/tokens"
+import { ErratumGrammaticae } from "@/errors"
+import { tessellare } from "@/lexer/lexer"
+import type { GenusTesserae, Tessera } from "@/lexer/tokens"
 import type {
   CampusSpeciei,
   ClavisPraecepti,
@@ -12,7 +12,7 @@ import type {
   RamusConditionis,
   Sententia,
   SpeciesExpectata,
-} from "./ast"
+} from "@/parser/ast"
 
 const FINIS_FICTUS: Tessera = { genus: "EOF", lexema: "", linea: -1, columna: -1 }
 

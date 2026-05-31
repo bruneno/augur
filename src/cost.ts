@@ -1,4 +1,4 @@
-import type { Consumptio } from "./providers/types"
+import type { Consumptio } from "@/providers/types"
 
 export interface Pretium {
   immissa: number
@@ -24,5 +24,5 @@ export function computaPretiumBRL(consumptio: Consumptio, exemplar: string): num
 
 export function summariumPretii(vocationes: number, consumptio: Consumptio, exemplar: string): string {
   const brl = computaPretiumBRL(consumptio, exemplar)
-  return `You spent R$${brl.toFixed(4)} on ${vocationes} divination(s) — ${consumptio.signaImmissa} in / ${consumptio.signaEmissa} out tokens (${exemplar}).`
+  return `You spent R$${brl.toFixed(4)} on ${vocationes} divination(s) - ${consumptio.signaImmissa} in / ${consumptio.signaEmissa} out tokens (${exemplar}).`
 }

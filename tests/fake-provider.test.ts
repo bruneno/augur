@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { OraculumFictum } from "../src/providers/fake"
-import type { Rogatio, SummariumOperandi } from "../src/providers/types"
+import { OraculumFictum } from "@/providers/fake"
+import type { Rogatio, SummariumOperandi } from "@/providers/types"
 
 function rogatio(op: string, ...praevisiones: string[]): Rogatio {
   const operandi: SummariumOperandi[] = praevisiones.map((praevisio) => ({ genus: "numerus", praevisio }))

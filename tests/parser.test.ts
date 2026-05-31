@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
-import { ErratumGrammaticae } from "../src/errors"
-import { analyza } from "../src/parser/parser"
-import type { Expressio, Sententia } from "../src/parser/ast"
+import { ErratumGrammaticae } from "@/errors"
+import { analyza } from "@/parser/parser"
+import type { Expressio, Sententia } from "@/parser/ast"
 
 function unaSententia(fons: string): Sententia {
   const s = analyza(fons)

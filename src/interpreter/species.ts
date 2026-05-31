@@ -1,5 +1,5 @@
-import type { SpeciesExpectata } from "../parser/ast"
-import { estVerumCrudus } from "./coercio"
+import type { SpeciesExpectata } from "@/parser/ast"
+import { estVerumCrudus } from "@/interpreter/coercio"
 import {
   creaAgmen,
   creaNumerus,
@@ -10,7 +10,7 @@ import {
   estVerum,
   repraesenta,
   type Valor,
-} from "./values"
+} from "@/interpreter/values"
 
 export function speciesDescriptio(s: SpeciesExpectata): string {
   switch (s.genus) {
