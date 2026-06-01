@@ -26,7 +26,10 @@ export class Grammaticus {
     const sententiae: Sententia[] = []
     while (!this.adFinem()) {
       const notae = this.legeContextus()
-      if (this.adFinem()) break
+      if (this.adFinem()) {
+        if (notae) throw this.erraNotaPendens()
+        break
+      }
       const s = this.legeSententiam()
       if (notae) s.contextus = notae
       sententiae.push(s)
@@ -34,12 +37,20 @@ export class Grammaticus {
     return sententiae
   }
 
+  private erraNotaPendens(): ErratumGrammaticae {
+    const t = this.hic()
+    return new ErratumGrammaticae("a context note (///) must be followed by a statement", t.linea, t.columna)
+  }
+
   private legeBlocus(): Sententia[] {
     this.expecta("LBRACE", "'{'")
     const sententiae: Sententia[] = []
     while (!this.inspice("RBRACE") && !this.adFinem()) {
       const notae = this.legeContextus()
-      if (this.inspice("RBRACE") || this.adFinem()) break
+      if (this.inspice("RBRACE") || this.adFinem()) {
+        if (notae) throw this.erraNotaPendens()
+        break
+      }
       const s = this.legeSententiam()
       if (notae) s.contextus = notae
       sententiae.push(s)

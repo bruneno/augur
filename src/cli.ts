@@ -28,10 +28,10 @@ export function legeMandata(argv: string[]): OptionesMandati {
     .option("--oracle <name>", "anthropic | openai | openrouter | ollama | fake")
     .option("--model <id>", "model id")
     .option("--temperature <n>", "default temperature", legeFractionem)
-    .option("--budget <n>", "AI call ceiling", legeInteger)
+    .option("--budget <n>", "AI call ceiling", (v) => legeInteger("--budget", v))
     .option("--remember", "cache divinations to disk for reproducible, cheaper runs", false)
     .option("--remember-file <path>", "cache file path (default .augur-cache.json)")
-    .option("--retry <n>", "retries on a transient oracle error", legeInteger)
+    .option("--retry <n>", "retries on a transient oracle error", (v) => legeInteger("--retry", v))
     .allowExcessArguments(false)
 
   program.parse(argv, { from: "user" })
@@ -69,8 +69,8 @@ function legeFractionem(valor: string): number {
   return n
 }
 
-function legeInteger(valor: string): number {
+function legeInteger(nomen: string, valor: string): number {
   const n = Number.parseInt(valor, 10)
-  if (Number.isNaN(n)) throw new Error(`invalid --budget: ${valor}`)
+  if (Number.isNaN(n)) throw new Error(`invalid ${nomen}: ${valor}`)
   return n
 }

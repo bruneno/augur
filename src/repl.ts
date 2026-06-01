@@ -6,6 +6,7 @@ import { analyza } from "@/parser/parser"
 
 export async function incipeSessionem(aestimator: Aestimator): Promise<void> {
   const rl = createInterface({ input: process.stdin, output: process.stdout })
+  aestimator.imponeRogationem((invitatio) => rl.question(invitatio))
   const ambitus = new Ambitus()
   console.log("augur séance - type a line, or 'exit' to leave")
   try {

@@ -1,3 +1,4 @@
+import { ErratumExsecutionis } from "@/errors"
 import { coerce } from "@/interpreter/coercio"
 import { temperaturaPro } from "@/interpreter/zones"
 import { creaAgmen, creaTabula, fingeOraculum, repraesenta, type Valor } from "@/interpreter/values"
@@ -34,21 +35,35 @@ export class Bancus {
     if (ctx.zona.genus === "Certus") {
       try {
         await this.machina().insere(collectio, valorAdJson(datum))
-      } catch {
-        // a failed write degrades the matching read to an oracle value; it must
-        // not poison reads of other collections, so nothing is cached here
+      } catch (err) {
+        throw new ErratumExsecutionis(
+          `cannot write to '${collectio}': ${err instanceof Error ? err.message : String(err)}`,
+        )
       }
       return
     }
     this.adde(`INSCRIBE into ${collectio}: ${repraesenta(datum)}`)
   }
 
-  recense(scopus: Valor, instructio: string): void {
+  recense(ctx: ContextusNativus, scopus: Valor, instructio: string): void {
+    if (ctx.zona.genus === "Certus") {
+      throw new ErratumExsecutionis("revise is not supported in a certain zone; the real store is append-only")
+    }
     this.adde(`REVISE ${repraesenta(scopus)}: ${instructio}`)
   }
 
-  expelle(descriptio: string, collectio: string): void {
+  expelle(ctx: ContextusNativus, descriptio: string, collectio: string): void {
+    if (ctx.zona.genus === "Certus") {
+      throw new ErratumExsecutionis("banish is not supported in a certain zone; the real store is append-only")
+    }
     this.adde(`BANISH from ${collectio} where ${descriptio}`)
+  }
+
+  async claude(): Promise<void> {
+    if (this.motor) {
+      await this.motor.claude()
+      this.motor = null
+    }
   }
 
   async memora(ctx: ContextusNativus, descriptio: string, collectio: string): Promise<Valor> {

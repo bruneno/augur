@@ -1,6 +1,6 @@
-import { Ollama } from "ollama"
-import { construePrompt, INSTRUCTIO_SYSTEMATIS } from "@/providers/prompt"
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
+import { type ChatResponse, Ollama } from "ollama"
+import { construePrompt, extraheValorem, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "@/providers/prompt"
+import type { Oraculum, Responsum, Rogatio } from "@/providers/types"
 
 export class OraculumOllama implements Oraculum {
   private readonly clavis: Ollama
@@ -13,11 +13,12 @@ export class OraculumOllama implements Oraculum {
   }
 
   async divina(rogatio: Rogatio): Promise<Responsum> {
+    let responsio: ChatResponse
     try {
-      const responsio = await this.clavis.chat({
+      responsio = await this.clavis.chat({
         model: this.exemplar,
         format: "json",
-        options: { temperature: rogatio.temperatura },
+        options: { temperature: restringeTemperaturam(rogatio.temperatura, 2) },
         messages: [
           {
             role: "system",
@@ -26,19 +27,13 @@ export class OraculumOllama implements Oraculum {
           { role: "user", content: construePrompt(rogatio) },
         ],
       })
-      const consumptio = {
-        signaImmissa: responsio.prompt_eval_count ?? 0,
-        signaEmissa: responsio.eval_count ?? 0,
-      }
-      const textus = responsio.message.content
-      if (!textus) return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
-      const datum = JSON.parse(textus) as { value?: ValorCrudus }
-      if (datum && typeof datum === "object" && "value" in datum && datum.value !== undefined) {
-        return { ratum: true, valor: datum.value, consumptio }
-      }
-      return { ratum: true, valor: datum as ValorCrudus, consumptio }
     } catch {
       return { ratum: false, causa: "ERROR_ORACULI" }
     }
+    const consumptio = {
+      signaImmissa: responsio.prompt_eval_count ?? 0,
+      signaEmissa: responsio.eval_count ?? 0,
+    }
+    return extraheValorem(responsio.message.content, consumptio)
   }
 }

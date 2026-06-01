@@ -170,7 +170,3 @@ export const VERBA_RESERVATA: Readonly<Record<string, GenusTesserae>> = {
   or: "OR",
   not: "NOT",
 }
-
-export function estVerbumReservatum(verbum: string): boolean {
-  return Object.prototype.hasOwnProperty.call(VERBA_RESERVATA, verbum)
-}

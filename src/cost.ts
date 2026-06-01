@@ -8,6 +8,7 @@ export interface Pretium {
 export const PRETIA: Readonly<Record<string, Pretium>> = {
   "claude-haiku-4-5": { immissa: 1, emissa: 5 },
   "gpt-4o-mini": { immissa: 0.15, emissa: 0.6 },
+  "openai/gpt-4o-mini": { immissa: 0.15, emissa: 0.6 },
   "llama3.1": { immissa: 0, emissa: 0 },
   fake: { immissa: 0, emissa: 0 },
 }

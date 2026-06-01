@@ -71,11 +71,12 @@ export class Aestimator {
   private readonly oraculum: Oraculum
   private temperaturaDivina: number
   private readonly spatiumMemoriae: number
-  private readonly roga: (invitatio: string) => Promise<string>
+  private roga: (invitatio: string) => Promise<string>
   private pila = new PilaZonarum()
   private contextusCurrens: string[] = []
   private bancus: Bancus | null = null
   private banci = new Map<string, Bancus>()
+  private claudendum: Promise<void> | null = null
   private readonly inclusa = new Set<string>()
 
   constructor(optiones: OptionesAestimatoris = {}) {
@@ -123,6 +124,20 @@ export class Aestimator {
     for (const s of programma) {
       await this.exsequere(s, ambitus)
     }
+  }
+
+  claude(): Promise<void> {
+    this.claudendum ??= (async () => {
+      for (const bancus of this.banci.values()) {
+        await bancus.claude()
+      }
+      this.banci.clear()
+    })()
+    return this.claudendum
+  }
+
+  imponeRogationem(roga: (invitatio: string) => Promise<string>): void {
+    this.roga = roga
   }
 
   private async exsequere(s: Sententia, amb: Ambitus): Promise<void> {
@@ -213,11 +228,11 @@ export class Aestimator {
         return
       case "Recensio":
         if (!this.bancus) return this.scaena.susurra("no database; commune first")
-        this.bancus.recense(await this.aestima(s.scopus, amb), s.instructio)
+        this.bancus.recense(this.ctxNativus(), await this.aestima(s.scopus, amb), s.instructio)
         return
       case "Expulsio": {
         if (!this.bancus) return this.scaena.susurra("no database; commune first")
-        this.bancus.expelle(repraesenta(await this.aestima(s.descriptio, amb)), s.collectio)
+        this.bancus.expelle(this.ctxNativus(), repraesenta(await this.aestima(s.descriptio, amb)), s.collectio)
         return
       }
     }
@@ -438,6 +453,7 @@ export class Aestimator {
       }
       case "ExpressioLogica": {
         const sinistra = await this.aestima(e.sinistra, amb)
+        if (estOraculum(sinistra)) return sinistra
         if (e.operator === "and") {
           if (!estVerum(sinistra)) return sinistra
           return await this.aestima(e.dextra, amb)

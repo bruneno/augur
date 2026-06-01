@@ -1,6 +1,6 @@
 import OpenAI from "openai"
-import { construePrompt, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "@/providers/prompt"
-import type { Oraculum, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
+import { construePrompt, extraheValorem, INSTRUCTIO_SYSTEMATIS, restringeTemperaturam } from "@/providers/prompt"
+import type { Oraculum, Responsum, Rogatio } from "@/providers/types"
 
 export interface OptionesClavisOpenAI {
   baseURL?: string
@@ -19,8 +19,9 @@ export class OraculumOpenAI implements Oraculum {
   }
 
   async divina(rogatio: Rogatio): Promise<Responsum> {
+    let responsio: OpenAI.Chat.Completions.ChatCompletion
     try {
-      const responsio = await this.clavis.chat.completions.create({
+      responsio = await this.clavis.chat.completions.create({
         model: this.exemplar,
         max_tokens: this.maxSigna,
         temperature: restringeTemperaturam(rogatio.temperatura, 2),
@@ -33,19 +34,13 @@ export class OraculumOpenAI implements Oraculum {
           { role: "user", content: construePrompt(rogatio) },
         ],
       })
-      const consumptio = {
-        signaImmissa: responsio.usage?.prompt_tokens ?? 0,
-        signaEmissa: responsio.usage?.completion_tokens ?? 0,
-      }
-      const textus = responsio.choices[0]?.message.content
-      if (!textus) return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
-      const datum = JSON.parse(textus) as { value?: ValorCrudus }
-      if (datum && typeof datum === "object" && "value" in datum && datum.value !== undefined) {
-        return { ratum: true, valor: datum.value, consumptio }
-      }
-      return { ratum: true, valor: datum as ValorCrudus, consumptio }
     } catch {
       return { ratum: false, causa: "ERROR_ORACULI" }
     }
+    const consumptio = {
+      signaImmissa: responsio.usage?.prompt_tokens ?? 0,
+      signaEmissa: responsio.usage?.completion_tokens ?? 0,
+    }
+    return extraheValorem(responsio.choices[0]?.message.content, consumptio)
   }
 }

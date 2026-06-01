@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs"
 import { legeMandata } from "@/cli"
 import { componeConfigurationem, extraheCaput, type PartesConfigurationis } from "@/config"
 import { summariumPretii } from "@/cost"
+import { claudeInterrogatorem } from "@/builtins/io"
 import { AugurErratum } from "@/errors"
 import { Aestimator } from "@/interpreter/interpreter"
 import type { Sententia } from "@/parser/ast"
@@ -45,6 +46,16 @@ async function principium(): Promise<void> {
     spatiumMemoriae: config.spatiumMemoriae,
   })
 
+  const claudeOmnia = (): Promise<void> => {
+    claudeInterrogatorem()
+    return aestimator.claude()
+  }
+  const adSignum = (): void => {
+    void claudeOmnia().finally(() => process.exit(0))
+  }
+  process.once("SIGINT", adSignum)
+  process.once("SIGTERM", adSignum)
+
   try {
     if (opts.seance) {
       await incipeSessionem(aestimator)
@@ -52,6 +63,7 @@ async function principium(): Promise<void> {
       await aestimator.curre(programma)
     }
   } finally {
+    await claudeOmnia()
     if (!opts.silens && aerarium.vocationes > 0) {
       console.error(summariumPretii(aerarium.vocationes, aerarium.consumptio, config.exemplar))
     }

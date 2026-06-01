@@ -25,8 +25,9 @@ export class OraculumAnthropicum implements Oraculum {
   ) {}
 
   async divina(rogatio: Rogatio): Promise<Responsum> {
+    let responsio: Anthropic.Message
     try {
-      const responsio = await this.clavis.messages.create({
+      responsio = await this.clavis.messages.create({
         model: this.exemplar,
         max_tokens: this.maxSigna,
         temperature: restringeTemperaturam(rogatio.temperatura, 1),
@@ -35,21 +36,21 @@ export class OraculumAnthropicum implements Oraculum {
         tool_choice: { type: "tool", name: NOMEN_INSTRUMENTI },
         messages: [{ role: "user", content: construePrompt(rogatio) }],
       })
-      const consumptio = {
-        signaImmissa: responsio.usage.input_tokens,
-        signaEmissa: responsio.usage.output_tokens,
-      }
-      for (const pars of responsio.content) {
-        if (pars.type === "tool_use" && pars.name === NOMEN_INSTRUMENTI) {
-          const input = pars.input as { value?: ValorCrudus }
-          if (input && "value" in input && input.value !== undefined) {
-            return { ratum: true, valor: input.value, consumptio }
-          }
-        }
-      }
-      return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
     } catch {
       return { ratum: false, causa: "ERROR_ORACULI" }
     }
+    const consumptio = {
+      signaImmissa: responsio.usage.input_tokens,
+      signaEmissa: responsio.usage.output_tokens,
+    }
+    for (const pars of responsio.content) {
+      if (pars.type === "tool_use" && pars.name === NOMEN_INSTRUMENTI) {
+        const input = pars.input as { value?: ValorCrudus }
+        if (input && "value" in input && input.value !== undefined && input.value !== null) {
+          return { ratum: true, valor: input.value, consumptio }
+        }
+      }
+    }
+    return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
   }
 }

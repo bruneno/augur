@@ -1,4 +1,4 @@
-import type { Rogatio } from "@/providers/types"
+import type { Consumptio, Responsum, Rogatio, ValorCrudus } from "@/providers/types"
 
 export const INSTRUCTIO_SYSTEMATIS =
   "You are the oracle of Augur, a programming language whose operations are divined rather than computed. " +
@@ -24,4 +24,19 @@ export function construePrompt(rogatio: Rogatio): string {
 
 export function restringeTemperaturam(temperatura: number, maxima: number): number {
   return Math.min(maxima, Math.max(0, temperatura))
+}
+
+export function extraheValorem(textus: string | null | undefined, consumptio: Consumptio): Responsum {
+  if (!textus) return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
+  let datum: unknown
+  try {
+    datum = JSON.parse(textus)
+  } catch {
+    return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
+  }
+  if (datum && typeof datum === "object" && "value" in datum) {
+    const valor = (datum as { value?: ValorCrudus }).value
+    if (valor !== undefined && valor !== null) return { ratum: true, valor, consumptio }
+  }
+  return { ratum: false, causa: "LECTIO_FALLAX", consumptio }
 }

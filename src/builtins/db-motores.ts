@@ -18,6 +18,7 @@ export interface MotorBasis {
   insere(collectio: string, datum: unknown): Promise<void>
   lege(collectio: string): Promise<unknown[]>
   legeOmnia(collectiones: Iterable<string>): Promise<OrdoCollectionis[]>
+  claude(): Promise<void>
 }
 
 class MotorSqlite implements MotorBasis {
@@ -57,6 +58,13 @@ class MotorSqlite implements MotorBasis {
       omnia.push({ collectio, ordines: await this.lege(collectio) })
     }
     return omnia
+  }
+
+  async claude(): Promise<void> {
+    if (this.database) {
+      this.database.close()
+      this.database = null
+    }
   }
 }
 
@@ -123,6 +131,15 @@ class MotorSql implements MotorBasis {
       omnia.push({ collectio, ordines: await this.lege(collectio) })
     }
     return omnia
+  }
+
+  async claude(): Promise<void> {
+    if (this.cliens) {
+      const cliens = this.cliens as unknown as { close?: () => unknown; end?: () => unknown }
+      if (typeof cliens.close === "function") await cliens.close()
+      else if (typeof cliens.end === "function") await cliens.end()
+      this.cliens = null
+    }
   }
 }
 
