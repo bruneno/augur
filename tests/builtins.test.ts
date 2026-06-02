@@ -81,9 +81,46 @@ describe("divined collection ops", () => {
     expect(out).toEqual(["{pos: [2], nonpos: [-1, -3]}"])
   })
 
+  it("classifies an oracle label outside the buckets into a fresh key", async () => {
+    const { o } = oraculumExpressum((r) => ({
+      ratum: true,
+      valor: r.operandi[0]?.praevisio === "1" ? "known" : "surprise",
+    }))
+    const out = await curreCum('proclaim classify [1, 2] into ["known"]', o)
+    expect(out).toEqual(["{known: [1], surprise: [2]}"])
+  })
+
+  it("stringifies a non-string classify label into the bucket key", async () => {
+    const { o } = oraculumExpressum(() => ({ ratum: true, valor: 7 }))
+    const out = await curreCum('proclaim classify [1, 2] into ["a", "b"]', o)
+    expect(out).toEqual(['{a: [], b: [], 7: [1, 2]}'])
+  })
+
+  it("drops a refused element when classifying", async () => {
+    const { o } = oraculumExpressum((r) =>
+      r.operandi[0]?.praevisio === "2"
+        ? { ratum: false, causa: "RECUSATIO" }
+        : { ratum: true, valor: "yes" },
+    )
+    const out = await curreCum('proclaim classify [1, 2, 3] into ["yes"]', o)
+    expect(out).toEqual(["{yes: [1, 3]}"])
+  })
+
   it("extracts via the provider", async () => {
     const { o } = oraculumExpressum(() => ({ ratum: true, valor: "found" }))
     expect(await curreCum('proclaim extract "emails" from "blah"', o)).toEqual(["found"])
+  })
+
+  it("forwards a non-string extract subject to the provider without a genus check", async () => {
+    let captum: Rogatio | null = null
+    const { o } = oraculumExpressum((r) => {
+      captum = r
+      return { ratum: true, valor: "ok" }
+    })
+    expect(await curreCum('proclaim extract "digits" from 123', o)).toEqual(["ok"])
+    expect(captum!.genusOperationis).toBe("extract")
+    expect(captum!.operandi[0]?.genus).toBe("numerus")
+    expect(captum!.operandi[0]?.praevisio).toBe("123")
   })
 
   it("refuses semantic filter inside certain", async () => {

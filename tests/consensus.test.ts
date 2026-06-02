@@ -10,7 +10,7 @@ async function curreCum(fons: string, oraculum: Oraculum): Promise<string[]> {
   return lineae
 }
 
-function oraculumSequens(valores: ValorCrudus[]): { o: Oraculum; vocationes: () => number } {
+function oraculumSequens(valores: (ValorCrudus | null)[]): { o: Oraculum; vocationes: () => number } {
   let i = 0
   return {
     o: {
@@ -42,5 +42,17 @@ describe("thrice (self-consistency)", () => {
     } }
     const out = await curreCum('proclaim divine "x" thrice', refuser)
     expect(out[0]).toContain("oracle")
+  })
+
+  it("drops a refusal and returns the majority of the valid votes", async () => {
+    const { o, vocationes } = oraculumSequens(["cat", null, "cat"])
+    expect(await curreCum('proclaim divine "an animal" thrice', o)).toEqual(["cat"])
+    expect(vocationes()).toBe(3)
+  })
+
+  it("returns the first valid value when all three votes are distinct", async () => {
+    const { o, vocationes } = oraculumSequens(["cat", "dog", "bird"])
+    expect(await curreCum('proclaim divine "an animal" thrice', o)).toEqual(["cat"])
+    expect(vocationes()).toBe(3)
   })
 })

@@ -3,11 +3,25 @@ import { ErratumAerarii } from "@/errors"
 import { Aestimator, type Scaena } from "@/interpreter/interpreter"
 import { Aerarium } from "@/providers/budget"
 import { OraculumFictum } from "@/providers/fake"
+import type { Oraculum, Responsum, Rogatio } from "@/providers/types"
 import { analyza } from "@/parser/parser"
 
 function collector(): { scaena: Scaena; lineae: string[] } {
   const lineae: string[] = []
   return { lineae, scaena: { proclama: (l) => lineae.push(l), susurra: () => {} } }
+}
+
+function oraculumNotans(fn: (r: Rogatio) => Responsum): { o: Oraculum; genera: string[] } {
+  const genera: string[] = []
+  return {
+    genera,
+    o: {
+      async divina(r) {
+        genera.push(r.genusOperationis)
+        return fn(r)
+      },
+    },
+  }
 }
 
 describe("divined operators", () => {
@@ -42,6 +56,30 @@ describe("divined operators", () => {
     await new Aestimator({ scaena, oraculum: fictum }).curre(analyza('proclaim (divine "x") + 1'))
     expect(lineae[0]).toContain("oracle")
     expect(fictum.vocationes).toBe(1)
+  })
+
+  it("propagates an oracle left operand of or instead of falling through to the right", async () => {
+    const { scaena, lineae } = collector()
+    const fictum = new OraculumFictum({ defectus: () => true })
+    await new Aestimator({ scaena, oraculum: fictum }).curre(analyza('proclaim (divine "x") or yes'))
+    expect(lineae[0]).toContain("oracle")
+    expect(lineae[0]).not.toBe("yes")
+  })
+
+  it("routes divined sort through the provider with the sort operation", async () => {
+    const { scaena, lineae } = collector()
+    const { o, genera } = oraculumNotans(() => ({ ratum: true, valor: [3, 2, 1] }))
+    await new Aestimator({ scaena, oraculum: o }).curre(analyza('proclaim sort [1, 2, 3] by "descending"'))
+    expect(genera).toEqual(["sort"])
+    expect(lineae).toEqual(["[3, 2, 1]"])
+  })
+
+  it("routes divined pick through the provider with the pick operation", async () => {
+    const { scaena, lineae } = collector()
+    const { o, genera } = oraculumNotans(() => ({ ratum: true, valor: 7 }))
+    await new Aestimator({ scaena, oraculum: o }).curre(analyza('proclaim pick [9, 8, 7] by "the smallest"'))
+    expect(genera).toEqual(["pick"])
+    expect(lineae).toEqual(["7"])
   })
 })
 

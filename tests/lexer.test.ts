@@ -35,6 +35,35 @@ describe("strings", () => {
   it("throws on an unterminated string", () => {
     expect(() => tessellare('"oops')).toThrow(ErratumLectionis)
   })
+
+  it("throws on a trailing backslash before EOF", () => {
+    expect(() => tessellare('"abc\\')).toThrow(ErratumLectionis)
+    expect(() => tessellare('"abc\\')).toThrow(/unterminated string/)
+  })
+
+  it("passes an unknown escape through to the literal character", () => {
+    const t = tessellare('"\\x"')
+    expect(t[0]?.genus).toBe("STRING")
+    expect(t[0]?.lexema).toBe("x")
+  })
+
+  it("decodes a backslash escape to a single backslash", () => {
+    const t = tessellare('"\\\\"')
+    expect(t[0]?.lexema).toBe("\\")
+  })
+
+  it("decodes the standard escapes individually", () => {
+    expect(tessellare('"\\n"')[0]?.lexema).toBe("\n")
+    expect(tessellare('"\\t"')[0]?.lexema).toBe("\t")
+    expect(tessellare('"\\""')[0]?.lexema).toBe('"')
+    expect(tessellare('"\\r"')[0]?.lexema).toBe("\r")
+  })
+
+  it("continues the string with a literal newline after a backslash-newline", () => {
+    const t = tessellare('"a\\\nb"')
+    expect(t[0]?.genus).toBe("STRING")
+    expect(t[0]?.lexema).toBe("a\nb")
+  })
 })
 
 describe("identifiers and keywords", () => {

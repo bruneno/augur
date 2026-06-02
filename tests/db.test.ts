@@ -75,6 +75,47 @@ describe("certain database (bun:sqlite)", () => {
     `
     expect(await curre(fons, { oraculum: new OraculumFictum() })).toEqual(["2"])
   })
+
+  it("rejects revise inside a certain zone", async () => {
+    const fons = `
+      certain {
+        commune with "sqlite://:memory:"
+        revise {nome: "Ana"} with "set saldo to 200"
+      }
+    `
+    await expect(curre(fons, { oraculum: new OraculumFictum() })).rejects.toThrow(
+      /revise is not supported in a certain zone/,
+    )
+  })
+
+  it("rejects banish inside a certain zone", async () => {
+    const fons = `
+      certain {
+        commune with "sqlite://:memory:"
+        banish {nome: "Ana"} from clientes
+      }
+    `
+    await expect(curre(fons, { oraculum: new OraculumFictum() })).rejects.toThrow(
+      /banish is not supported in a certain zone/,
+    )
+  })
+})
+
+describe("divined database mutations", () => {
+  it("appends revise and banish to the ledger without throwing", async () => {
+    const cap = oraculumCapiens("ok")
+    const fons = `
+      commune with "vibes://localhost/loja"
+      inscribe {nome: "Ana"} into clientes
+      revise {nome: "Ana"} with "set saldo to 200"
+      banish {nome: "Ana"} from clientes
+      proclaim query "list them"
+    `
+    expect(await curre(fons, { oraculum: cap.oraculum })).toEqual(["ok"])
+    const blob = cap.ultima()?.operandi[0]?.praevisio ?? ""
+    expect(blob).toContain("REVISE")
+    expect(blob).toContain("BANISH")
+  })
 })
 
 describe("certain database (postgres)", () => {
