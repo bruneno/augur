@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Augur — the language divined by an LLM</title>
+<meta name="description" content="Augur is an interpreted language where every operation is divined by an LLM instead of computed. A joke about AI software, with a dead-serious interpreter underneath.">
+<meta name="theme-color" content="#0e0c16">
+<meta property="og:title" content="Augur — the language divined by an LLM">
+<meta property="og:description" content="An interpreted language where 2 + 2 goes through an oracle. Usually returns 4. No promises.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bruneno.github.io/augur/">
+<meta property="og:image" content="https://bruneno.github.io/augur/assets/augur.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Augur — the language divined by an LLM">
+<meta name="twitter:description" content="An interpreted language where 2 + 2 goes through an oracle. Usually returns 4. No promises.">
+<meta name="twitter:image" content="https://bruneno.github.io/augur/assets/augur.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav" id="top">
+  <a class="brand" href="#top"><span class="brand-mark">✦</span> Augur</a>
+  <nav class="nav-links">
+    <a href="#gradient">The Gradient</a>
+    <a href="#why">Why</a>
+    <a href="#examples">Examples</a>
+    <a href="#install">Install</a>
+    <a href="#faq">FAQ</a>
+    <a class="nav-cta" href="https://github.com/bruneno/augur" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="stars" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">v0.1.0 · an interpreted language · do not deploy</p>
+      <h1>The language that asks an <span class="grad">LLM</span> what <span class="nowrap">2 + 2</span> is.</h1>
+      <p class="lede">Augur is an interpreted language where every operation is <strong>divined by an oracle</strong> instead of computed. Control flow is a real tree-walking interpreter. The <em>answers</em> are a vibe. It's a joke about AI software — the interpreter is dead serious.</p>
+      <div class="hero-btns">
+        <a class="btn btn-gold" href="#install">$ Get Augur</a>
+        <a class="btn btn-ghost" href="#examples">Read the omens →</a>
+      </div>
+      <p class="hero-foot">Free &amp; offline with the <code>fake</code> oracle · plug in Anthropic, OpenAI, OpenRouter or Ollama for the real thing.</p>
+    </div>
+
+    <div class="hero-card">
+      <div class="medallion">
+        <img src="assets/augur.png" alt="An augur — the Roman priest who read omens from the flight of birds" loading="eager">
+      </div>
+      <div class="code hero-code">
+        <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="code-name">oracle.aug</span></div>
+        <pre><code class="aug">oracle "anthropic"
+
+summon answer = 2 + 2     // probably 4
+proclaim answer</code></pre>
+        <div class="oracle-gag">
+          <button id="consult" class="btn-tiny">Consult the oracle</button>
+          <span id="verdict" class="verdict" role="status" aria-live="polite">→ <span class="t-num">4</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <p>Other languages compute <code>2 + 2</code>. Augur <em>asks nicely</em> and hopes for the best. There is a <code>certain { }</code> block for cowards.</p>
+</section>
+
+<section id="gradient" class="section reveal">
+  <p class="kicker">The confidence gradient</p>
+  <h2>Every operation picks a side.</h2>
+  <p class="section-lede">Three zones, decided at op-time by a stack. Same syntax — wildly different relationship with the truth.</p>
+  <div class="zones">
+    <article class="zone zone-divine">
+      <h3><span class="zone-tag">divine</span> <span class="zone-sub">default</span></h3>
+      <p>Through the AI at normal temperature. Usually right. No warranty, express or implied.</p>
+      <div class="code"><pre><code class="aug">summon n = 2 + 2
+// 4 (it thinks)</code></pre></div>
+    </article>
+    <article class="zone zone-chaos">
+      <h3><span class="zone-tag">chaos N</span> <span class="zone-sub">anarchy</span></h3>
+      <p>Crank the temperature. The dice are loud. <code>2 + 2</code> may now yield a fish.</p>
+      <div class="code"><pre><code class="aug">chaos 0.9 {
+  proclaim 2 + 2   // "fish"
+}</code></pre></div>
+    </article>
+    <article class="zone zone-certain">
+      <h3><span class="zone-tag">certain</span> <span class="zone-sub">cowardice</span></h3>
+      <p>Real, deterministic, native. No AI, no tokens, no excuses. The grown-up zone.</p>
+      <div class="code"><pre><code class="aug">certain {
+  proclaim 2 + 2   // 4. always.
+}</code></pre></div>
+    </article>
+  </div>
+  <p class="footnote">The golden rule: control flow, scope and function calls are 100% deterministic. The oracle only decides <em>whether each step's result is right</em> — never <em>what is computable</em>.</p>
+</section>
+
+<section id="why" class="section reveal">
+  <p class="kicker">Why Augur?</p>
+  <h2>Cursed features, fully load-bearing.</h2>
+  <div class="features">
+    <article class="feature">
+      <h3>Semantic collections</h3>
+      <p>Sort, filter, map and classify by plain English. Your data, judged by an oracle.</p>
+      <div class="code"><pre><code class="aug">sort tickets by "looks urgent"</code></pre></div>
+    </article>
+    <article class="feature">
+      <h3>The amnesiac database</h3>
+      <p>Persistence is fiction. Overflow the context budget and it forgets the oldest rows. Object permanence not included.</p>
+      <div class="code"><pre><code class="aug">banish "clients under 60" from clients</code></pre></div>
+    </article>
+    <article class="feature">
+      <h3>gather + thrice</h3>
+      <p>Run divinations in parallel; ask three times and trust the majority. Self-consistency via mob rule.</p>
+      <div class="code"><pre><code class="aug">divine "the sentiment" upon review thrice</code></pre></div>
+    </article>
+    <article class="feature">
+      <h3>Divined REST APIs</h3>
+      <p>A whole HTTP server whose routes are hallucinated on demand. Production-grade.<span class="aster">*</span></p>
+      <div class="code"><pre><code class="aug">serve 8787 with handle</code></pre></div>
+    </article>
+    <article class="feature">
+      <h3>Vibe-tests</h3>
+      <p>Assertions the oracle judges. Unit tests, but make them feelings. Great for fuzzy LLM output in CI.</p>
+      <div class="code"><pre><code class="aug">believe reply is "polite and on-topic"</code></pre></div>
+    </article>
+    <article class="feature">
+      <h3>Typed coercion</h3>
+      <p>Force hallucinations into a known shape. Wrong, perhaps — but well-typed.</p>
+      <div class="code"><pre><code class="aug">divine "the user" as {name: text, age: number}</code></pre></div>
+    </article>
+  </div>
+  <p class="aster-note"><span class="aster">*</span> not production-grade.</p>
+</section>
+
+<section id="examples" class="section reveal">
+  <p class="kicker">Examples</p>
+  <h2>Real programs. Real syntax. Questionable wisdom.</h2>
+  <p class="section-lede">Every snippet below runs. Use <code>--oracle fake</code> to run them free and offline, or a real oracle to let chaos in.</p>
+
+  <div class="tabs" role="tablist" aria-label="Augur examples"></div>
+  <div class="example" id="ex-panel" role="tabpanel" tabindex="0">
+    <div class="code">
+      <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="code-name" id="ex-name">guess.aug</span>
+        <button class="copy" id="ex-copy" type="button">Copy</button>
+      </div>
+      <pre><code class="aug" id="ex-code"></code></pre>
+    </div>
+    <p class="example-cap" id="ex-cap"></p>
+  </div>
+</section>
+
+<section id="tour" class="section reveal">
+  <p class="kicker">A 60-second tour</p>
+  <h2>The whole language, more or less.</h2>
+  <div class="code wide">
+    <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="code-name">tour.aug</span></div>
+    <pre><code class="aug" id="tour-code"></code></pre>
+  </div>
+</section>
+
+<section id="install" class="section reveal">
+  <p class="kicker">Install &amp; run</p>
+  <h2>Summon it locally.</h2>
+  <div class="install-grid">
+    <div class="code">
+      <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="code-name">terminal</span>
+        <button class="copy" data-copy="install-dev" type="button">Copy</button>
+      </div>
+      <pre><code class="sh" id="install-dev"># dev — needs Bun (https://bun.sh)
+bun install
+bun run src/index.ts examples/semantic_etl.aug
+bun run src/index.ts --seance        # interactive REPL</code></pre>
+    </div>
+    <div class="code">
+      <div class="code-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="code-name">terminal</span>
+        <button class="copy" data-copy="install-bin" type="button">Copy</button>
+      </div>
+      <pre><code class="sh" id="install-bin"># standalone binary — runs with no Bun or Node
+bun run build                        # produces ./aug
+./aug examples/guess.aug \
+  --oracle openrouter --model openai/gpt-4o-mini --remember</code></pre>
+    </div>
+  </div>
+  <p class="footnote">Default oracle is <code>fake</code> (deterministic, offline). <code>--remember</code> caches divinations to disk for reproducible, zero-token re-runs. Delete the cache to re-roll the dice.</p>
+</section>
+
+<section id="faq" class="section reveal">
+  <p class="kicker">Frequently divined questions</p>
+  <h2>You have concerns. Valid.</h2>
+  <div class="faq">
+    <details>
+      <summary>Is it production ready?</summary>
+      <p>No. The database has amnesia, the auth is a vibe, and <code>2 + 2</code> bills you for the privilege. You will deploy it anyway.</p>
+    </details>
+    <details>
+      <summary>Will it give the same answer twice?</summary>
+      <p>Only with <code>--remember</code>, which memoizes every divination to disk. Without it, nondeterminism is the entire point.</p>
+    </details>
+    <details>
+      <summary>How much does <code>2 + 2</code> cost?</summary>
+      <p>A few tokens and some dignity. Wrap it in <code>certain { }</code> and it's free, instant, and reliably <span class="t-num">4</span>.</p>
+    </details>
+    <details>
+      <summary>Is the divined authentication secure?</summary>
+      <p>It is prompt-injectable and the docs say so, repeatedly. The SHA-256 hash is hallucinated by the model. For anything real, move the hash and the check into <code>certain { }</code> with actual crypto.</p>
+    </details>
+    <details>
+      <summary>Why is it called Augur?</summary>
+      <p>An <em>augur</em> was a Roman priest who read the future in the flight of birds. We read it in token probabilities. Honestly, similar hit rate.</p>
+    </details>
+    <details>
+      <summary>Why would anyone build this?</summary>
+      <p>To find out what happens. The useful 20% — semantic <code>filter</code>/<code>extract</code>/<code>classify</code>, typed coercion, vibe-tests — turns out to be genuinely handy. The other 80% is the joke.</p>
+    </details>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <p class="brand"><span class="brand-mark">✦</span> Augur</p>
+      <p class="muted">Operations divined, not computed.</p>
+    </div>
+    <nav class="footer-links">
+      <a href="https://github.com/bruneno/augur" target="_blank" rel="noopener">Source</a>
+      <a href="https://github.com/bruneno/augur/blob/main/docs/index.md" target="_blank" rel="noopener">Reference</a>
+      <a href="https://github.com/bruneno/augur-auth-demo" target="_blank" rel="noopener">Auth demo</a>
+      <a href="https://github.com/bruneno/augur/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+    </nav>
+  </div>
+  <p class="disclaimer">A joke about LLM-driven software. Do not deploy it. <span class="muted">(You will anyway.)</span> Built with faith and a tree-walking interpreter.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
