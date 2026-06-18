@@ -124,13 +124,21 @@ h1{
 
 .hero-card{position:relative;display:flex;flex-direction:column;gap:18px}
 .medallion{
-  align-self:center;width:148px;height:148px;border-radius:50%;
-  background:radial-gradient(circle at 50% 40%,#f7f1e0,#e4d9bd);
-  border:2px solid var(--gold);
-  box-shadow:0 0 0 6px rgba(240,192,64,.10), 0 18px 50px rgba(0,0,0,.5);
-  display:grid;place-items:center;overflow:hidden;
+  align-self:center;margin:0;width:186px;
+  background:linear-gradient(180deg,#f5efde,#e7dcbf);
+  border:1px solid var(--gold);border-radius:14px;
+  padding:16px 18px 12px;
+  box-shadow:0 0 0 4px rgba(240,192,64,.10), 0 18px 50px rgba(0,0,0,.5);
+  text-align:center;
 }
-.medallion img{width:74%;height:74%;object-fit:contain;object-position:center;filter:contrast(1.05)}
+.medallion img{
+  display:block;width:100%;height:auto;max-height:240px;
+  object-fit:contain;mix-blend-mode:multiply;filter:contrast(1.05);
+}
+.medallion figcaption{
+  margin-top:10px;padding-top:9px;border-top:1px solid rgba(92,83,64,.25);
+  font-family:var(--serif);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#5c5340;
+}
 
 /* ---------- code blocks ---------- */
 .code{
