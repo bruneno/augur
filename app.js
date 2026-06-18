@@ -76,6 +76,38 @@ const EXAMPLES=[
     }
 }
 main()`},
+  {id:"calc",name:"calculator.aug",cap:`A calculator in <em>pure Augur</em>. <code>precise</code> does real native math inside <code>certain</code> (exact, free, deterministic); <code>divine</code> lets the oracle evaluate a natural-language expression. Full version: <a href="https://github.com/bruneno/augur/blob/main/examples/calculator.aug" target="_blank" rel="noopener">examples/calculator.aug</a>.`,
+   code:`/// You are a precise calculator. Reply with ONLY the resulting number.
+
+ritual precise(a, op, b) {
+    certain {
+        summon x = a as number
+        summon y = b as number
+        when op == "+" -> give x + y
+        when op == "-" -> give x - y
+        when op == "*" -> give x * y
+        when op == "/" -> {
+            when y == 0 -> give "nope - division by zero"
+            give x / y
+        }
+        when op == "^" -> give x ^ y
+        give "unknown operator: " + op
+    }
+}
+
+ritual main() {
+    repeat forever {
+        summon mode = ask "(p)recise / (d)ivine / (q)uit: "
+        when mode == "q" -> break
+        when mode == "d" -> {
+            summon expr = ask "expression: "
+            proclaim divine "evaluate this arithmetic expression exactly" upon expr as number
+        }
+        otherwise -> proclaim precise(ask "a: ", ask "op: ", ask "b: ")
+    }
+}
+
+main()`},
   {id:"etl",name:"semantic_etl.aug",cap:`The genuinely-useful 20%: semantic <code>map</code> / <code>extract</code> / <code>filter</code> / <code>sort</code>. The part you'd actually ship.`,
    code:`summon names = ["ana", "joão", "  MARIA ", "pedro"]
 summon cleaned = map names with "trim and title-case"
